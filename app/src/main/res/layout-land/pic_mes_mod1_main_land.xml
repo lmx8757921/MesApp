@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/respircare_title"
+        android:layout_width="15dp"
+        android:layout_height="0dp"
+        android:text="respircare"
+        android:textSize="28sp"
+        android:lineSpacingMultiplier="0.8"
+        android:ems="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.013"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        />
+
+    <TextView
+        android:id="@+id/area1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/working"
+        android:gravity="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/area3"
+        app:layout_constraintHeight_percent="0.48"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toRightOf="@+id/respircare_title"
+        app:layout_constraintRight_toLeftOf="@+id/area2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.48" />
+
+
+    <TextView
+        android:id="@+id/area2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/fio2"
+        android:gravity="center"
+        android:text="21"
+        android:textColor="@color/white"
+        android:textSize="50sp"
+        android:paddingBottom="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/area4"
+        app:layout_constraintHeight_percent="0.48"
+        app:layout_constraintLeft_toRightOf="@+id/area1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.48" />
+
+
+    <TextView
+        android:id="@+id/area3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/flow"
+        android:gravity="center"
+        android:text="14"
+        android:textColor="@color/white"
+        android:textSize="50sp"
+        android:paddingBottom="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.48"
+        app:layout_constraintLeft_toRightOf="@+id/respircare_title"
+        app:layout_constraintRight_toLeftOf="@+id/area4"
+        app:layout_constraintTop_toBottomOf="@+id/area1"
+        app:layout_constraintWidth_percent="0.48" />
+
+
+    <TextView
+        android:id="@+id/area4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/temperature"
+        android:gravity="center"
+        android:text="34"
+        android:textColor="@color/white"
+        android:textSize="50sp"
+        android:paddingBottom="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.48"
+        app:layout_constraintLeft_toRightOf="@+id/area3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/area2"
+        app:layout_constraintWidth_percent="0.48" />
+
+
+</android.support.constraint.ConstraintLayout>
