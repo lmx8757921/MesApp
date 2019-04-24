@@ -1,0 +1,20 @@
+<resources>
+    <attr name="unit" format="string" />
+    <attr name="type" format="string" />
+    <attr name="unitSize" format="integer" />
+    <attr name="typeSize" format="integer" />
+
+    <declare-styleable name="MesCircularView">
+        <attr name="unit"/>
+        <attr name="type" />
+        <attr name="unitSize" />
+        <attr name="typeSize"  />
+    </declare-styleable>
+
+    <declare-styleable name="MesView">
+        <attr name="unit"/>
+        <attr name="type" />
+        <attr name="result" format="string" />
+        <attr name="resultSize" format="integer" />
+    </declare-styleable>
+</resources>

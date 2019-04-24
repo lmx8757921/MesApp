@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:background="@color/dimgray"
+    >
+    <TextView
+        android:id="@+id/area1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:text="模式     S/T"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:background="@mipmap/time_mod2"
+        app:layout_constraintBottom_toTopOf="@id/chart1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.48"
+        app:layout_constraintHeight_percent="0.1"
+        />
+
+    <TextView
+        android:id="@+id/area2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/time_mod2"
+        app:layout_constraintBottom_toTopOf="@+id/chart1"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintLeft_toRightOf="@+id/area1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.48" />
+
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="test"
+        app:layout_constraintBottom_toTopOf="@+id/chart2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintWidth_percent="0.75" />
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="test"
+        app:layout_constraintBottom_toTopOf="@+id/chart1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintWidth_percent="0.75" />
+    <com.xinming.mes.mesapp.views.MesStModCountView
+        android:id="@+id/stCount"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="test"
+        app:layout_constraintBottom_toTopOf="@+id/bta11"
+        app:layout_constraintLeft_toRightOf="@+id/chart1"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintWidth_percent="0.22" />
+
+    <com.xinming.mes.mesapp.views.MesCircularView
+        android:id="@+id/bta11"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/blue"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/bta21"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.19"
+        app:layout_constraintHeight_percent="0.3"
+        app:type=""
+        app:unit="cmH2O"
+        app:unitSize="40" />
+    <TextView
+        android:id="@+id/t11"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingBottom="5sp"
+        android:gravity="center"
+        android:text="21.0"
+        android:textSize="25sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/bta11"
+        app:layout_constraintLeft_toLeftOf="@+id/bta11"
+        app:layout_constraintRight_toRightOf="@+id/bta11"
+        app:layout_constraintBottom_toBottomOf="@+id/bta11" />
+
+        <TextView
+            android:id="@+id/t12"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="bottom|center"
+            android:text="IPAP"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bta11"
+            app:layout_constraintLeft_toLeftOf="@+id/bta11"
+            app:layout_constraintRight_toLeftOf="@+id/t13"
+            app:layout_constraintTop_toTopOf="@+id/bta11"
+            app:layout_constraintWidth_percent="0.095"
+             />
+
+        <TextView
+            android:id="@+id/t13"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="bottom|center"
+            android:text="20.0"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bta11"
+            app:layout_constraintLeft_toRightOf="@+id/t12"
+            app:layout_constraintRight_toRightOf="@+id/bta11"
+            app:layout_constraintTop_toTopOf="@+id/bta11"
+            app:layout_constraintWidth_percent="0.095"
+             />
+
+    <com.xinming.mes.mesapp.views.MesCircularView
+        android:id="@+id/bta21"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/blue"
+        app:layout_constraintBottom_toBottomOf="@+id/bta11"
+        app:layout_constraintRight_toLeftOf="@+id/bta31"
+        app:layout_constraintLeft_toRightOf="@id/bta11"
+        app:layout_constraintTop_toTopOf="@+id/bta11"
+        app:layout_constraintWidth_percent="0.19"
+        app:unit="cmH2O"
+        app:unitSize="40" />
+
+    <TextView
+        android:id="@+id/t21"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingBottom="5sp"
+        android:gravity="center"
+        android:text="4.3"
+        android:textSize="25sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/bta21"
+        app:layout_constraintLeft_toLeftOf="@+id/bta21"
+        app:layout_constraintRight_toRightOf="@+id/bta21"
+        app:layout_constraintBottom_toBottomOf="@+id/bta21" />
+
+    <TextView
+        android:id="@+id/t22"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom|center"
+        android:text="EPAP"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bta21"
+        app:layout_constraintLeft_toLeftOf="@+id/bta21"
+        app:layout_constraintRight_toLeftOf="@+id/t23"
+        app:layout_constraintTop_toTopOf="@+id/bta21"
+        app:layout_constraintWidth_percent="0.095"
+        />
+
+    <TextView
+        android:id="@+id/t23"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom|center"
+        android:text="5.5"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bta21"
+        app:layout_constraintLeft_toRightOf="@+id/t22"
+        app:layout_constraintRight_toRightOf="@+id/bta21"
+        app:layout_constraintTop_toTopOf="@+id/bta21"
+        app:layout_constraintWidth_percent="0.095"
+        />
+
+    <com.xinming.mes.mesapp.views.MesCircularView
+        android:id="@+id/bta31"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/blue"
+        app:layout_constraintBottom_toBottomOf="@+id/bta11"
+        app:layout_constraintRight_toLeftOf="@+id/bta41"
+        app:layout_constraintLeft_toRightOf="@id/bta21"
+        app:layout_constraintTop_toTopOf="@+id/bta11"
+        app:layout_constraintWidth_percent="0.19"
+        app:unit="bpm"
+        app:unitSize="40" />
+    <TextView
+        android:id="@+id/t31"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingBottom="5sp"
+        android:gravity="center"
+        android:text="26"
+        android:textSize="25sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/bta31"
+        app:layout_constraintLeft_toLeftOf="@+id/bta31"
+        app:layout_constraintRight_toRightOf="@+id/bta31"
+        app:layout_constraintBottom_toBottomOf="@+id/bta31" />
+    <TextView
+        android:id="@+id/t32"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom|center"
+        android:text="呼吸频率"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bta31"
+        app:layout_constraintLeft_toLeftOf="@+id/bta31"
+        app:layout_constraintRight_toLeftOf="@+id/t33"
+        app:layout_constraintTop_toTopOf="@+id/bta31"
+        app:layout_constraintWidth_percent="0.12"
+        />
+
+    <TextView
+        android:id="@+id/t33"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom|center"
+        android:text="9"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bta31"
+        app:layout_constraintLeft_toRightOf="@+id/t32"
+        app:layout_constraintRight_toRightOf="@+id/bta31"
+        app:layout_constraintTop_toTopOf="@+id/bta31"
+        app:layout_constraintWidth_percent="0.07"
+        />
+
+
+    <com.xinming.mes.mesapp.views.MesCircularView
+        android:id="@+id/bta41"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/blue"
+        app:layout_constraintBottom_toBottomOf="@+id/bta11"
+        app:layout_constraintRight_toLeftOf="@+id/bta51"
+        app:layout_constraintTop_toTopOf="@+id/bta11"
+        app:layout_constraintLeft_toRightOf="@id/bta31"
+        app:layout_constraintWidth_percent="0.19"
+
+        app:unit="ml"
+        app:unitSize="40" />
+
+
+    <TextView
+        android:id="@+id/t41"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingBottom="5sp"
+        android:gravity="center"
+        android:text="1234"
+        android:textSize="25sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/bta41"
+        app:layout_constraintLeft_toLeftOf="@+id/bta41"
+        app:layout_constraintRight_toRightOf="@+id/bta41"
+        app:layout_constraintBottom_toBottomOf="@+id/bta41" />
+    <TextView
+        android:id="@+id/t42"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom|center"
+        android:text="潮气量"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bta41"
+        app:layout_constraintLeft_toLeftOf="@+id/bta41"
+        app:layout_constraintRight_toLeftOf="@+id/t43"
+        app:layout_constraintTop_toTopOf="@+id/bta41"
+        app:layout_constraintWidth_percent="0.095"
+        />
+
+    <TextView
+        android:id="@+id/t43"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom|center"
+        android:text="5.5"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bta41"
+        app:layout_constraintLeft_toRightOf="@+id/t42"
+        app:layout_constraintRight_toRightOf="@+id/bta41"
+        app:layout_constraintTop_toTopOf="@+id/bta41"
+        app:layout_constraintWidth_percent="0.095"
+        />
+
+    <com.xinming.mes.mesapp.views.MesCircularView
+        android:id="@+id/bta51"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/blue"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bta11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bta11"
+        app:layout_constraintWidth_percent="0.19"
+
+        app:unit="%"
+        app:unitSize="40" />
+
+
+    <TextView
+        android:id="@+id/t51"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingBottom="5sp"
+        android:gravity="center"
+        android:text="21"
+        android:textSize="25sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/bta51"
+        app:layout_constraintLeft_toLeftOf="@+id/bta51"
+        app:layout_constraintRight_toRightOf="@+id/bta51"
+        app:layout_constraintBottom_toBottomOf="@+id/bta51" />
+    <TextView
+        android:id="@+id/t52"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom|center"
+        android:text="FiO2"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bta51"
+        app:layout_constraintLeft_toLeftOf="@+id/bta51"
+        app:layout_constraintRight_toLeftOf="@+id/t53"
+        app:layout_constraintTop_toTopOf="@+id/bta51"
+        app:layout_constraintWidth_percent="0.095"
+        />
+
+    <TextView
+        android:id="@+id/t53"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom|center"
+        android:text="28"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bta51"
+        app:layout_constraintLeft_toRightOf="@+id/t52"
+        app:layout_constraintRight_toRightOf="@+id/bta51"
+        app:layout_constraintTop_toTopOf="@+id/bta51"
+        app:layout_constraintWidth_percent="0.095"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

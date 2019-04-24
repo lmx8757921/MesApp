@@ -1,8 +1,0 @@
-<resources>
-    <declare-styleable name="MesView">
-        <attr name="unit" format="string" />
-        <attr name="type" format="string" />
-        <attr name="result" format="string" />
-        <attr name="resultSize" format="integer" />
-    </declare-styleable>
-</resources>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/area1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:text="工作中"
+        android:textColor="@color/white"
+        android:textSize="50sp"
+        android:background="@mipmap/working_mod2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.48"
+        app:layout_constraintHeight_percent="0.28"
+        />
+
+    <TextView
+        android:id="@+id/area2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/time_mod2"
+        android:gravity="center"
+        android:text="05:28"
+        android:textColor="@color/white"
+        android:textSize="50sp"
+        app:layout_constraintLeft_toRightOf="@+id/area1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/area1"
+        app:layout_constraintHeight_percent="0.28"
+        app:layout_constraintWidth_percent="0.48" />
+
+
+    <com.xinming.mes.mesapp.views.MesCircularView
+        android:id="@+id/area3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/holo_blue_light"
+        app:type="流 量"
+        app:unit="L/min"
+        app:typeSize="90"
+        app:unitSize="40"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/area1"
+        app:layout_constraintRight_toLeftOf="@+id/area4"
+        app:layout_constraintTop_toBottomOf="@+id/area1"
+        app:layout_constraintHeight_percent="0.68"
+        app:layout_constraintWidth_percent="0.32" />
+
+    <TextView
+        android:id="@+id/t3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="18"
+        android:textSize="40sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/area3"
+        app:layout_constraintLeft_toLeftOf="@+id/area3"
+        app:layout_constraintRight_toRightOf="@+id/area3"
+        app:layout_constraintBottom_toBottomOf="@+id/area3" />
+
+    <com.xinming.mes.mesapp.views.MesCircularView
+        android:id="@+id/area4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/blue"
+        app:type="氧浓度"
+        app:unit="%"
+        app:typeSize="90"
+        app:unitSize="40"
+        app:layout_constraintLeft_toRightOf="@+id/area3"
+        app:layout_constraintRight_toLeftOf="@+id/area5"
+        app:layout_constraintTop_toTopOf="@+id/area3"
+        app:layout_constraintBottom_toBottomOf="@+id/area3"
+        app:layout_constraintWidth_percent="0.32" />
+
+    <TextView
+        android:id="@+id/t4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="28"
+        android:textSize="40sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/area4"
+        app:layout_constraintLeft_toLeftOf="@+id/area4"
+        app:layout_constraintRight_toRightOf="@+id/area4"
+        app:layout_constraintBottom_toBottomOf="@+id/area4" />
+
+
+    <com.xinming.mes.mesapp.views.MesCircularView
+        android:id="@+id/area5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/orange"
+        android:layout_marginEnd="6dp"
+        android:layout_marginRight="6dp"
+        android:textColor="@color/white"
+
+        app:type="温 度"
+        app:unit="℃"
+        app:typeSize="90"
+        app:unitSize="40"
+        app:layout_constraintBottom_toBottomOf="@+id/area3"
+        app:layout_constraintLeft_toRightOf="@+id/area4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/area3"
+        app:layout_constraintWidth_percent="0.32" />
+
+    <TextView
+        android:id="@+id/t5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="38"
+        android:textSize="40sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/area5"
+        app:layout_constraintLeft_toLeftOf="@+id/area5"
+        app:layout_constraintRight_toRightOf="@+id/area5"
+        app:layout_constraintBottom_toBottomOf="@+id/area5" />
+
+</android.support.constraint.ConstraintLayout>

@@ -5,8 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -54,6 +52,10 @@ public class MesView extends View {
                 R.styleable.MesView_result);
 
         resultSize = a.getInt(R.styleable.MesView_resultSize,80);
+
+//        unitSize = a.getInt(R.styleable.MesView_unitSize,50);
+//
+//        typeSize = a.getInt(R.styleable.MesView_typeSize,100);
         cPaint = new Paint();
 
         mTextPaint = new Paint();
@@ -93,24 +95,23 @@ public class MesView extends View {
 
         }
 
-        if( type != null && !type.isEmpty()){
-            mTextPaint.setTextSize(100) ;//设置绘制文本时的文字大小
-            canvas.drawText(type,
-                    contentWidth/2-150,
-                      contentHeight,
-                    mTextPaint);
-        }
-
-        if( unit != null && !unit.isEmpty()){
-            mTextPaint.setTextSize(70) ;//设置绘制文本时的文字大小
-            canvas.drawText(unit,
-                    contentWidth/2 -35,
-                     contentHeight - 140  ,
-                    mTextPaint);
-        }
-
-
-
+//        if( type != null && !type.isEmpty()){
+//            mTextPaint.setTextSize(typeSize) ;//设置绘制文本时的文字大小
+//            mTextPaint.setTextAlign(Paint.Align.CENTER);
+//            canvas.drawText(type,
+//                    contentWidth/2,
+//                    contentHeight/2 +contentWidth/6 +typeSize  ,
+//                    mTextPaint);
+//        }
+//
+//        if( unit != null && !unit.isEmpty()){
+//            mTextPaint.setTextSize(unitSize) ;//设置绘制文本时的文字大小
+//            mTextPaint.setTextAlign(Paint.Align.CENTER);
+//            canvas.drawText(unit,
+//                    contentWidth/2 ,
+//                    contentHeight/2 +contentWidth/6 -unitSize ,
+//                    mTextPaint);
+//        }
     }
 
 
@@ -146,5 +147,6 @@ public class MesView extends View {
     public void setResultSize(int resultSize) {
         this.resultSize = resultSize;
     }
+
 
 }
