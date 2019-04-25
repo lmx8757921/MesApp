@@ -9,6 +9,8 @@
         <attr name="type" />
         <attr name="unitSize" />
         <attr name="typeSize"  />
+        <attr name="offsetX" format="integer" />
+        <attr name="offsetY" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="MesView">

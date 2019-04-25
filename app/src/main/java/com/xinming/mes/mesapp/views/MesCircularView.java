@@ -18,9 +18,10 @@ public class MesCircularView extends View {
     private String type; // 显示类型
     private int unitSize;//单位结果显示文字大小
     private int typeSize;//显示类型结果显示文字大小
+    private int offsetX;//图形X轴坐标偏移量
+    private int offsetY;//图形Y轴坐标偏移量
     private Paint cPaint;
     private Paint mTextPaint;
-
     public MesCircularView(Context context) {
         super(context);
         init(null, 0);
@@ -50,6 +51,8 @@ public class MesCircularView extends View {
 
         unitSize = a.getInt(R.styleable.MesCircularView_unitSize,20);
         typeSize = a.getInt(R.styleable.MesCircularView_typeSize,100);
+        offsetX = a.getInt(R.styleable.MesCircularView_offsetX,0);
+        offsetY = a.getInt(R.styleable.MesCircularView_offsetY,0);
         cPaint = new Paint();
         mTextPaint = new Paint();
     }
@@ -73,16 +76,16 @@ public class MesCircularView extends View {
         cPaint.setColor(Color.WHITE);
         cPaint.setStrokeWidth(10);
 
-        int r = contentWidth/4;
-        canvas.drawCircle(contentWidth/2,contentHeight/2,r,cPaint);
+        int r = (contentWidth > contentHeight ) ? contentHeight/3 : contentHeight/3;
+        canvas.drawCircle(contentWidth/2 + offsetX,contentHeight/2+offsetY,r,cPaint);
         mTextPaint.setColor(Color.WHITE);//设置画笔颜色
-
+        mTextPaint.setStrokeWidth(30);
         if( type != null && !type.isEmpty()){
             mTextPaint.setTextAlign(Paint.Align.CENTER);
             mTextPaint.setTextSize(typeSize) ;//设置绘制文本时的文字大小
             canvas.drawText(type,
-                    contentWidth/2,
-                    contentHeight/2 + r + typeSize ,
+                    contentWidth/2+offsetX,
+                    contentHeight/2 + r + typeSize +offsetY,
                     mTextPaint);
         }
 
@@ -90,8 +93,8 @@ public class MesCircularView extends View {
             mTextPaint.setTextSize(unitSize) ;//设置绘制文本时的文字大小
             mTextPaint.setTextAlign(Paint.Align.CENTER);
             canvas.drawText(unit,
-                    contentWidth/2,
-                    contentHeight/2 + r - unitSize/2 ,
+                    contentWidth/2 + offsetX,
+                    contentHeight/2 + r - unitSize/2 +offsetY,
                     mTextPaint);
         }
     }
@@ -127,6 +130,23 @@ public class MesCircularView extends View {
 
     public void setTypeSize(int typeSize) {
         this.typeSize = typeSize;
+    }
+
+
+    public int getOffsetX() {
+        return offsetX;
+    }
+
+    public void setOffsetX(int offsetX) {
+        this.offsetX = offsetX;
+    }
+
+    public int getOffsetY() {
+        return offsetY;
+    }
+
+    public void setOffsetY(int offsetY) {
+        this.offsetY = offsetY;
     }
 
 }
