@@ -24,7 +24,6 @@ public class MesDataServer{
     Map<String,View> views = null;
     ProgressBar pb = null;
     ServerSocket server = null;
-    private boolean hasRun = false;
     public MesDataServer(Context cxt, Map<String,View> views,ProgressBar pb){
         this.ctx = cxt;
         this.views = views;
@@ -70,10 +69,6 @@ public class MesDataServer{
                 try  {
                     Socket client = server.accept();
                     Log.d("MesDataServer","connected");
-                    if(hasRun){
-                        continue;
-                    }
-                    hasRun = true;
                     while(true) {
                         in = client.getInputStream();
                         byte[] bts = new byte[255];
@@ -93,7 +88,6 @@ public class MesDataServer{
                     }
 
                 }catch (IOException e){
-                    hasRun = false;
                     throw new RuntimeException(e);
                 }finally {
                     if(in != null){
