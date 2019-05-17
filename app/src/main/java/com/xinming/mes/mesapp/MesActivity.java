@@ -23,14 +23,10 @@ public class MesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         pb = (ProgressBar)findViewById(R.id.start_progressBar);
         pb.setVisibility(View.GONE);
-//        initViews();
-//        dataServer = new MesDataServer(this,views,pb );
-//        dataServer.start();
-        String a = null;
-        if(a.equals("")){
+        initViews();
+        dataServer = new MesDataServer(this,views);
+        dataServer.start();
 
-        }
-        //Toast.makeText(this,"qqqqqqqqqqq",Toast.LENGTH_LONG).show();
     }
 
     @Override
