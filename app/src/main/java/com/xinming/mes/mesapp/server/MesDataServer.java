@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.xinming.mes.mesapp.MesApp;
 import com.xinming.mes.mesapp.entity.RespiratorData;
 import com.xinming.mes.mesapp.mod.IModHandler;
 import com.xinming.mes.mesapp.mod.Mod1Handler;
@@ -24,13 +25,13 @@ import java.util.Map;
 
 public class MesDataServer {
 
+    //activity 上下文
     private Context ctx = null;
-    Map<String, View> views = null;
+    //TCP server
     ServerSocket server = null;
 
-    public MesDataServer(Context cxt, Map<String, View> views) {
+    public MesDataServer(Context cxt) {
         this.ctx = cxt;
-        this.views = views;
         try {
             server = new ServerSocket(8888);
         } catch (IOException e) {
@@ -52,6 +53,13 @@ public class MesDataServer {
         }
     }
 
+    /**
+     * 判断数据是否结束
+     * @param a1
+     * @param a2
+     * @param a3
+     * @return
+     */
     private boolean isEnd(int a1, int a2, int a3) {
         Log.d("", (char) a1 + "," + (char) a2 + "," + (char) a3);
         if (a1 == 'E' && a2 == 'N' && a3 == 'D') {
@@ -61,10 +69,18 @@ public class MesDataServer {
         }
     }
 
-    private IModHandler getModHandler(String mod) {
-        return new Mod1Handler(ctx, views.get(mod));
+    /**
+     * 获取不同模式下的业务处理Handler
+     * @param modeName
+     * @return
+     */
+    private IModHandler getModHandler(String modeName) {
+        return ((MesApp)ctx.getApplicationContext()).getHandlers().get(modeName);
     }
 
+    /**
+     * 接收呼吸机数据任务类
+     */
     private class RecevieMsgTask implements Runnable {
         @Override
         public void run() {
@@ -96,6 +112,12 @@ public class MesDataServer {
             }
         }
 
+        /**
+         * 获取呼吸机传来的数据
+         * @param in
+         * @return
+         * @throws IOException
+         */
         private RespiratorData getRespiratorData(InputStream in) throws IOException {
 //            6	同步字
             in.read(new byte[6]);
