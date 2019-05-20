@@ -82,6 +82,7 @@ public class MesDataServer {
      * 接收呼吸机数据任务类
      */
     private class RecevieMsgTask implements Runnable {
+        RespiratorData configData = new RespiratorData();
         @Override
         public void run() {
             InputStream in = null;
@@ -161,7 +162,9 @@ public class MesDataServer {
                 in.read(new byte[7]);
                 //            6	累计运行时间
                 in.read(new byte[6]);
-                return getRespiratorDataConfig(in);
+
+                configData = getRespiratorDataConfig(in);
+                return configData;
             }else{
                 return getRespiratorDataPackage(in);
             }
@@ -343,7 +346,7 @@ public class MesDataServer {
                 case 0x07:return "MVAPS" ;
                 case 0x08:return "HFlow" ;
                 case 0x09:return "LFlow" ;
-                default : throw new RuntimeException("模式数据错误,请确认数据传解析的输正确性");
+                default : throw new RuntimeException("getMode模式数据错误,请确认数据传解析的输正确性!");
             }
         }
 
@@ -360,11 +363,55 @@ public class MesDataServer {
             }
         }
 
-
-        public short getShort(byte[] b) {
+        /**
+         * 双字节转成short型
+         * @param b
+         * @return
+         */
+        private short getShort(byte[] b) {
             return (short) (((b[1] << 8) | b[0] & 0xff));
         }
 
+        /**
+         * 根据单位取压力值
+         * @param val
+         * @param unit
+         * @return
+         */
+        private double getValueWithUnit(int val,String unit){
+            double i = val;
+            if("kpa".equals(unit)){
+                i = i /100;
+            }else{
+                //0x00：cmh2o//0x02： hpa
+                i = i /10;
+            }
+            return  i;
+        }
+
+
+        private String getUnit(int u){
+            if(u == 0x00){
+                return "kpa";
+            }else if(u == 0x01){
+                return "cmH2o";
+            }else if(u == 0x02){
+                return "hpa";
+            }else{
+                throw new RuntimeException("getUnit模式数据错误,请确认数据传解析的输正确性!");
+            }
+        }
+
+        private String getLanguage(int l){
+            if(l == 0x00){
+                return "中文";
+            }else if(l == 0x01){
+                return "英文";
+            }else{
+                throw new RuntimeException("getLanguage模式数据错误,请确认数据传解析的输正确性!");
+            }
+
+        }
 
 
     }

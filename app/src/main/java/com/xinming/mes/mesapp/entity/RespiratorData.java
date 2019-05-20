@@ -16,6 +16,8 @@ public class RespiratorData {
     int spo2 = 0;//血氧
     int temperature = 0;//温度
     boolean  isConfig = false;//是否是配置数据
+    String unit = "cmH2o";//单位
+    String language = "中文";//语言
 
     public String getTime() {
         return time;
@@ -135,5 +137,22 @@ public class RespiratorData {
     public void setConfig(boolean config) {
         isConfig = config;
     }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
 
 }

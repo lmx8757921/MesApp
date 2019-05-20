@@ -46,12 +46,18 @@ public class Mod3Handler extends BaseModHandler {
         });
 
         if(data.isConfig()){//更新配置数据
+            v.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("Mod3Handler","更新配置数据 start");
 
+                }
+            });
         }else{//更新单包数据
             v.post(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d("Mod3Handler","run start");
+                    Log.d("Mod3Handler","更新单包数据 start");
                     flowChartManager.addEntry(data.getFlow());
                     pressureChartManager.addEntry(data.getPressure());
                 }
