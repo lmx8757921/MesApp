@@ -6,12 +6,11 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.xinming.mes.mesapp.mod.IModHandler;
-import com.xinming.mes.mesapp.mod.Mod1Handler;
+import com.xinming.mes.mesapp.mod.HLModHandler;
 import com.xinming.mes.mesapp.mod.Mod2Handler;
-import com.xinming.mes.mesapp.mod.Mod3Handler;
+import com.xinming.mes.mesapp.mod.OtherModHandler;
 import com.xinming.mes.mesapp.server.MesDataServer;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class MesActivity extends AppCompatActivity {
@@ -42,19 +41,18 @@ public class MesActivity extends AppCompatActivity {
         View v1 = View.inflate(this, R.layout.mes_mod1_main_land, null);
         View v2 = View.inflate(this, R.layout.mes_mod2_main_land, null);
         View v3 = View.inflate(this, R.layout.mes_mod3_main_land, null);
-        IModHandler modHandler1 = new Mod1Handler(this,v1);
-        IModHandler modHandler2 = new Mod2Handler(this,v2);
-        IModHandler modHandler3 = new Mod3Handler(this,v3);
+        IModHandler hlModHandler = new HLModHandler(this,v1);
+        IModHandler otherModHandler = new OtherModHandler(this,v3);
         Map<String,IModHandler> handlers = ((MesApp)getApplication()).getHandlers();
-        handlers.put("S/T",modHandler3);
-        handlers.put("T",modHandler3);
-        handlers.put("S",modHandler3);
-        handlers.put("CPAP",modHandler3);
-        handlers.put("APAP",modHandler3);
-        handlers.put("PCV",modHandler3);
-        handlers.put("AutoS",modHandler3);
-        handlers.put("MVAPS",modHandler3);
-        handlers.put("HFlow",modHandler1);
-        handlers.put("LFlow",modHandler1);
+        handlers.put("S/T",otherModHandler);
+        handlers.put("T",otherModHandler);
+        handlers.put("S",otherModHandler);
+        handlers.put("CPAP",otherModHandler);
+        handlers.put("APAP",otherModHandler);
+        handlers.put("PCV",otherModHandler);
+        handlers.put("AutoS",otherModHandler);
+        handlers.put("MVAPS",otherModHandler);
+        handlers.put("HFlow",hlModHandler);
+        handlers.put("LFlow",hlModHandler);
     }
 }

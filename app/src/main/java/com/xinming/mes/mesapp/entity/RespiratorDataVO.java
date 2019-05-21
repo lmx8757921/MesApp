@@ -1,20 +1,20 @@
 package com.xinming.mes.mesapp.entity;
 
-public class RespiratorData {
-    String time = null;//时间
-    String mode = null;//模式
+public class RespiratorDataVO {
+    String time = "";//时间
+    String mode = "";//模式
     int flow = 0;//流量
     int pressure = 0;//压力
-    double ipap = 0;//ipap测量值
-    double epap = 0;//epap测量值
-    int bmp = 0;//呼吸频率
-    int ml = 0;//潮气量
-    int fio2 = 0;//氧气浓度
-    double ie = 0;//呼吸比
-    double mv = 0;//分钟通气量
-    int leak = 0;//漏气量
-    int spo2 = 0;//血氧
-    int temperature = 0;//温度
+    String ipap = "";//ipap测量值
+    String epap = "";//epap测量值
+    String bmp = "";//呼吸频率
+    String ml = "";//潮气量
+    String fio2 = "";//氧气浓度
+    String ie = "";//呼吸比
+    String mv = "";//分钟通气量
+    String leak = "";//漏气量
+    String spo2 = "";//血氧
+    String temperature = "";//温度
 
     public String getTime() {
         return time;
@@ -48,83 +48,84 @@ public class RespiratorData {
         this.pressure = pressure;
     }
 
-    public double getIpap() {
+    public String getIpap() {
         return ipap;
     }
 
-    public void setIpap(double ipap) {
+    public void setIpap(String ipap) {
         this.ipap = ipap;
     }
 
-    public double getEpap() {
+    public String getEpap() {
         return epap;
     }
 
-    public void setEpap(double epap) {
+    public void setEpap(String epap) {
         this.epap = epap;
     }
 
-    public int getBmp() {
+    public String getBmp() {
         return bmp;
     }
 
-    public void setBmp(int bmp) {
+    public void setBmp(String bmp) {
         this.bmp = bmp;
     }
 
-    public int getMl() {
+    public String getMl() {
         return ml;
     }
 
-    public void setMl(int ml) {
+    public void setMl(String ml) {
         this.ml = ml;
     }
 
-    public int getFio2() {
+    public String getFio2() {
         return fio2;
     }
 
-    public void setFio2(int fio2) {
+    public void setFio2(String fio2) {
         this.fio2 = fio2;
     }
 
-    public double getIe() {
+    public String getIe() {
         return ie;
     }
 
-    public void setIe(double ie) {
+    public void setIe(String ie) {
         this.ie = ie;
     }
 
-    public double getMv() {
+    public String getMv() {
         return mv;
     }
 
-    public void setMv(double mv) {
+    public void setMv(String mv) {
         this.mv = mv;
     }
 
-    public int getLeak() {
+    public String getLeak() {
         return leak;
     }
 
-    public void setLeak(int leak) {
+    public void setLeak(String leak) {
         this.leak = leak;
     }
 
-    public int getSpo2() {
+    public String getSpo2() {
         return spo2;
     }
 
-    public void setSpo2(int spo2) {
+    public void setSpo2(String spo2) {
         this.spo2 = spo2;
     }
 
-    public int getTemperature() {
+    public String getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(int temperature) {
+    public void setTemperature(String temperature) {
         this.temperature = temperature;
     }
+
 }
