@@ -7,7 +7,6 @@ import android.widget.ProgressBar;
 
 import com.xinming.mes.mesapp.mod.IModHandler;
 import com.xinming.mes.mesapp.mod.HLModHandler;
-import com.xinming.mes.mesapp.mod.Mod2Handler;
 import com.xinming.mes.mesapp.mod.OtherModHandler;
 import com.xinming.mes.mesapp.server.MesDataServer;
 
