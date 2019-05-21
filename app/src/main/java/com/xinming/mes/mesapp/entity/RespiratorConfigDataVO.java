@@ -1,106 +1,71 @@
 package com.xinming.mes.mesapp.entity;
 
 public class RespiratorConfigDataVO {
-    String time = "";//时间
-    String mode = "";//模式
-    String flowCfg = "";//流量配置
-    String pressureCfg = "";//压力配置
-    String ipapCfg = "";//ipap测量值配置
-    String epapCfg = "";//epap测量值配置
-    String bmpCfg = "";//呼吸频率配置
-    String mlCfg = "";//潮气量配置
-    String fio2Cfg = "";//氧气浓度配置
-    String spo2Cfg = "";//血氧配置
-    String temperatureCfg = "";//温度配置
+    String ipap = "";//ipap测量值
+    String epap = "";//epap测量值
+    String bmp = "";//呼吸频率
+    String ml = "";//潮气量
+    String fio2 = "";//氧气浓度
+    String temperature = "";//温度
+    String flow = "";//流量
     String unit = "cmH2o";//单位
     String language = "中文";//语言
+    String mode = "";//模式
 
-    public String getTime() {
-        return time;
+    public String getIpap() {
+        return ipap;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setIpap(String ipap) {
+        this.ipap = ipap;
     }
 
-    public String getMode() {
-        return mode;
+    public String getEpap() {
+        return epap;
     }
 
-    public void setMode(String mode) {
-        this.mode = mode;
+    public void setEpap(String epap) {
+        this.epap = epap;
     }
 
-    public String getFlowCfg() {
-        return flowCfg;
+    public String getBmp() {
+        return bmp;
     }
 
-    public void setFlowCfg(String flowCfg) {
-        this.flowCfg = flowCfg;
+    public void setBmp(String bmp) {
+        this.bmp = bmp;
     }
 
-    public String getPressureCfg() {
-        return pressureCfg;
+    public String getMl() {
+        return ml;
     }
 
-    public void setPressureCfg(String pressureCfg) {
-        this.pressureCfg = pressureCfg;
+    public void setMl(String ml) {
+        this.ml = ml;
     }
 
-    public String getIpapCfg() {
-        return ipapCfg;
+    public String getFio2() {
+        return fio2;
     }
 
-    public void setIpapCfg(String ipapCfg) {
-        this.ipapCfg = ipapCfg;
+    public void setFio2(String fio2) {
+        this.fio2 = fio2;
     }
 
-    public String getEpapCfg() {
-        return epapCfg;
+    public String getTemperature() {
+        return temperature;
     }
 
-    public void setEpapCfg(String epapCfg) {
-        this.epapCfg = epapCfg;
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
     }
 
-    public String getBmpCfg() {
-        return bmpCfg;
+    public String getFlow() {
+        return flow;
     }
 
-    public void setBmpCfg(String bmpCfg) {
-        this.bmpCfg = bmpCfg;
-    }
-
-    public String getMlCfg() {
-        return mlCfg;
-    }
-
-    public void setMlCfg(String mlCfg) {
-        this.mlCfg = mlCfg;
-    }
-
-    public String getFio2Cfg() {
-        return fio2Cfg;
-    }
-
-    public void setFio2Cfg(String fio2Cfg) {
-        this.fio2Cfg = fio2Cfg;
-    }
-
-    public String getSpo2Cfg() {
-        return spo2Cfg;
-    }
-
-    public void setSpo2Cfg(String spo2Cfg) {
-        this.spo2Cfg = spo2Cfg;
-    }
-
-    public String getTemperatureCfg() {
-        return temperatureCfg;
-    }
-
-    public void setTemperatureCfg(String temperatureCfg) {
-        this.temperatureCfg = temperatureCfg;
+    public void setFlow(String flow) {
+        this.flow = flow;
     }
 
     public String getUnit() {
@@ -117,5 +82,13 @@ public class RespiratorConfigDataVO {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 }

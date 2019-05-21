@@ -89,11 +89,17 @@ public class DataExecuterService {
     }
 
     private RespiratorConfigDataVO getConfigDataVO(RespiratorConfigData cfgData){
-        return null;
+
+        RespiratorConfigDataVO vo = new RespiratorConfigDataVO();
+        String mode = cfgData.getMode();
+
+
+        return vo;
     }
 
     private RespiratorDataVO getRespiratorDataVO(RespiratorData data){
-        return null;
+        RespiratorDataVO vo = new RespiratorDataVO();
+        return vo;
     }
 
     /**
