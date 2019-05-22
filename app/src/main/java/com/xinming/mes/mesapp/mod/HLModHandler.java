@@ -19,7 +19,7 @@ public class HLModHandler extends BaseModHandler {
         super(ctx,v1);
     }
     @Override
-    protected void updatePackageData(final RespiratorDataVO data) {
+    protected void updatePackageData(final RespiratorDataVO data,final RespiratorConfigDataVO cfgData) {
         v.post(new Runnable() {
             @Override
             public void run() {

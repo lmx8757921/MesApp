@@ -11,6 +11,6 @@ public interface IModHandler {
 
    void updateViewWithConfigData(RespiratorConfigDataVO viewData);
 
-   void updateViewWithPackageData(RespiratorDataVO viewData);
+   void updateViewWithPackageData(RespiratorDataVO viewData,RespiratorConfigDataVO viewCfgData);
 }
 

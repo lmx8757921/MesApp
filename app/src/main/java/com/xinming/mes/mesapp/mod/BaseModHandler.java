@@ -17,9 +17,9 @@ public abstract class BaseModHandler implements IModHandler {
         this.v = v;
     }
     @Override
-    public void updateViewWithPackageData(final RespiratorDataVO data) {
+    public void updateViewWithPackageData(final RespiratorDataVO data,RespiratorConfigDataVO viewCfgData) {
         setContentView();
-        updatePackageData(data);
+        updatePackageData(data,viewCfgData);
     }
 
     @Override
@@ -29,7 +29,7 @@ public abstract class BaseModHandler implements IModHandler {
         updateConfigData(data);
     }
 
-    protected abstract void updatePackageData(final RespiratorDataVO data);
+    protected abstract void updatePackageData(final RespiratorDataVO data,final RespiratorConfigDataVO cfgData);
 
     protected abstract void updateConfigData(final RespiratorConfigDataVO data);
 

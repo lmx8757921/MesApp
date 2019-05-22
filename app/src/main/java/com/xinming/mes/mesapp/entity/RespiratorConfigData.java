@@ -3,6 +3,7 @@ package com.xinming.mes.mesapp.entity;
 public class RespiratorConfigData {
     double ipap = 0;//ipap测量值
     double epap = 0;//epap测量值
+    double cpap = 0;//测量值
     int bmp = 0;//呼吸频率
     int ml = 0;//潮气量
     int fio2 = 0;//氧气浓度
@@ -26,6 +27,14 @@ public class RespiratorConfigData {
 
     public void setEpap(double epap) {
         this.epap = epap;
+    }
+
+    public double getCpap() {
+        return cpap;
+    }
+
+    public void setCpap(double cpap) {
+        this.cpap = cpap;
     }
 
     public int getBmp() {

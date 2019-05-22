@@ -5,15 +5,16 @@ public class RespiratorDataVO {
     String mode = "";//模式
     int flow = 0;//流量
     int pressure = 0;//压力
-    String ipap = "";//ipap测量值
-    String epap = "";//epap测量值
-    String bmp = "";//呼吸频率
-    String ml = "";//潮气量
-    String fio2 = "";//氧气浓度
-    String ie = "";//呼吸比
-    String mv = "";//分钟通气量
-    String leak = "";//漏气量
-    String spo2 = "";//血氧
+    String ipap = "--";//ipap测量值
+    String epap = "--";//epap测量值
+    String cpap = "--";//cpap测量值
+    String bmp = "--";//呼吸频率
+    String ml = "--";//潮气量
+    String fio2 = "--";//氧气浓度
+    String ie = "--";//呼吸比
+    String mv = "--";//分钟通气量
+    String leak = "--";//漏气量
+    String spo2 = "--";//血氧
     String temperature = "";//温度
 
     public String getTime() {
@@ -62,6 +63,14 @@ public class RespiratorDataVO {
 
     public void setEpap(String epap) {
         this.epap = epap;
+    }
+
+    public String getCpap() {
+        return cpap;
+    }
+
+    public void setCpap(String cpap) {
+        this.cpap = cpap;
     }
 
     public String getBmp() {

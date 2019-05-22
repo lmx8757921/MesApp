@@ -7,6 +7,7 @@ public class RespiratorData {
     int pressure = 0;//压力
     double ipap = 0;//ipap测量值
     double epap = 0;//epap测量值
+    double cpap = 0;//测量值
     int bmp = 0;//呼吸频率
     int ml = 0;//潮气量
     int fio2 = 0;//氧气浓度
@@ -15,6 +16,8 @@ public class RespiratorData {
     int leak = 0;//漏气量
     int spo2 = 0;//血氧
     int temperature = 0;//温度
+
+
 
     public String getTime() {
         return time;
@@ -62,6 +65,14 @@ public class RespiratorData {
 
     public void setEpap(double epap) {
         this.epap = epap;
+    }
+
+    public double getCpap() {
+        return cpap;
+    }
+
+    public void setCpap(double cpap) {
+        this.cpap = cpap;
     }
 
     public int getBmp() {

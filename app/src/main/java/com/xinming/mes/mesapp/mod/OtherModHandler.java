@@ -27,7 +27,7 @@ public class OtherModHandler extends BaseModHandler {
         pressureChartManager.setYAxis(100, 0, 10);
     }
     @Override
-    protected void updatePackageData(final RespiratorDataVO data) {
+    protected void updatePackageData(final RespiratorDataVO data,final RespiratorConfigDataVO cfgData) {
 
         //更新单包数据
         v.post(new Runnable() {
