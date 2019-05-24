@@ -114,30 +114,30 @@ public class MesStModCountView extends View {
                 leftY*15,
                 mTextPaint);
 
-        float rightX = contentWidth;
-        float rightY = contentHeight /16;
-        mTextPaint.setColor(Color.GREEN);
-        mTextPaint.setTextAlign(Paint.Align.RIGHT);
-        mTextPaint.setTextSize(100);
-        canvas.drawText("1:1.7",
-                rightX,
-                rightY*3,
-                mTextPaint);
-
-        canvas.drawText("30.0",
-                rightX,
-                rightY*7,
-                mTextPaint);
-
-        canvas.drawText("19",
-                rightX,
-                rightY*11,
-                mTextPaint);
-
-        canvas.drawText("--",
-                rightX,
-                rightY*15,
-                mTextPaint);
+//        float rightX = contentWidth;
+//        float rightY = contentHeight /16;
+//        mTextPaint.setColor(Color.GREEN);
+//        mTextPaint.setTextAlign(Paint.Align.RIGHT);
+//        mTextPaint.setTextSize(100);
+//        canvas.drawText("1:1.7",
+//                rightX,
+//                rightY*3,
+//                mTextPaint);
+//
+//        canvas.drawText("30.0",
+//                rightX,
+//                rightY*7,
+//                mTextPaint);
+//
+//        canvas.drawText("19",
+//                rightX,
+//                rightY*11,
+//                mTextPaint);
+//
+//        canvas.drawText("--",
+//                rightX,
+//                rightY*15,
+//                mTextPaint);
         }
 
 

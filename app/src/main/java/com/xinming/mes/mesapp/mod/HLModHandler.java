@@ -23,7 +23,7 @@ public class HLModHandler extends BaseModHandler {
         v.post(new Runnable() {
             @Override
             public void run() {
-                Log.d(this.getClass().getSimpleName(),"run start");
+                Log.d(this.getClass().getSimpleName(),"更新单包数据 start");
                 TextView txTime = v.findViewById(R.id.area2);
                 //时间
                 txTime.setText(data.getTime());
@@ -39,7 +39,7 @@ public class HLModHandler extends BaseModHandler {
                 TextView txTempture = v.findViewById(R.id.t5);
                 //温度
                 txFio2.setText(String.valueOf(data.getTemperature()));
-
+                Log.d(this.getClass().getSimpleName(),"更新单包数据 end");
             }
         });
 
@@ -47,8 +47,8 @@ public class HLModHandler extends BaseModHandler {
 
     @Override
     protected void updateConfigData(RespiratorConfigDataVO data) {
-        //更新配置数据
-
+        Log.d(this.getClass().getSimpleName(),"更新配置数据 start");
+        Log.d(this.getClass().getSimpleName(),"更新配置数据 end");
     }
 
 

@@ -110,12 +110,15 @@ public class DataExecuterService {
             //流量
             int flow = in.read();
             configData.setFlow(flow);
+            vo.setFlow(String.valueOf(flow));
             //温度
             int temperature = in.read();
             configData.setTemperature(temperature);
+            vo.setTemperature(getTemperature(temperature));
             //氧气浓度
             int fio2 = in.read();
             configData.setFio2(fio2);
+            vo.setFio2(getFiO2(fio2));
         }else if("S/T".equals(modeName)){
 //            IPAP(2)
             bIpaps = new byte[2];
@@ -140,7 +143,7 @@ public class DataExecuterService {
 //            氧浓度(1)
             int fio2 = in.read();
             configData.setFio2(fio2);
-            vo.setFio2(String.valueOf(fio2));
+            vo.setFio2(getFiO2(fio2));
 //            温度(1)
             in.read(new byte[1]);
 
@@ -433,7 +436,7 @@ public class DataExecuterService {
 //                5	温度
             int temperature = in.read();
             data.setTemperature(temperature);
-            vo.setTemperature(String.valueOf(temperature));
+            vo.setTemperature(getTemperature(temperature));
 //                6	氧气浓度0-100
             int fio2 = in.read();
             data.setFio2(fio2);
@@ -500,16 +503,17 @@ public class DataExecuterService {
             vo.setLeak(String.valueOf(leak));
 //                10	分钟通气量(0-30)L/min
             int mv = in.read();
-            data.setMv(mv);//TODO
-            vo.setMv(String.valueOf(mv));//TODO
+            double dMv =  getValueWithUnit(mv,configData.getUnit());
+            data.setMv(dMv);
+            vo.setMv(String.valueOf(dMv));
 //                11	呼吸频率(0-60)min
             int bmp = in.read();
             data.setBmp(bmp);
             vo.setBmp(String.valueOf(bmp));
 //                12	吸呼比(1-99),1:0.1-9.9
-            int ie = in.read();//TODO
-            data.setIe(ie);//TODO
-            vo.setIe(String.valueOf(ie));//TODO
+            int ie = in.read();
+            data.setIe(((double)ie)/10);
+            vo.setIe("1:"+(data.getIe()));
 //                13	IPAP(40-250)4-25cmH2O 目标值
             in.read(new byte[1]);
 //                14	EPAP(40-200)4-20cmH2O目标值
@@ -654,6 +658,24 @@ public class DataExecuterService {
             return "英文";
         }else{
             throw new RuntimeException("getLanguage模式数据错误,请确认数据传解析的输正确性!");
+        }
+    }
+
+    private String getTemperature(int t){
+        //0x00，关；其他：如0x25，37℃
+        if(t == 0x00){
+            return "关";
+        }else{
+            return String.valueOf(t);
+        }
+    }
+
+    private  String getFiO2(int f){
+        //0x00，关；其他：如0x32， 50%
+        if(f == 0x00){
+            return "关";
+        }else{
+            return String.valueOf(f);
         }
     }
 

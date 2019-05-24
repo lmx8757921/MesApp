@@ -73,6 +73,68 @@
         app:layout_constraintHeight_percent="0.6"
         app:layout_constraintWidth_percent="0.22" />
 
+<!-- ######## I:E SPo2  Start-->
+    <TextView
+        android:id="@+id/ie"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center|right"
+        android:text="1:1.0"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/mv"
+        app:layout_constraintRight_toRightOf="@+id/stCount"
+        app:layout_constraintLeft_toLeftOf="@+id/stCount"
+        app:layout_constraintTop_toBottomOf="@+id/area2"
+        app:layout_constraintWidth_percent="0.095"
+        />
+
+    <TextView
+        android:id="@+id/mv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center|right"
+        android:text="1:1.0"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/leak"
+        app:layout_constraintRight_toRightOf="@+id/stCount"
+        app:layout_constraintLeft_toLeftOf="@+id/stCount"
+        app:layout_constraintTop_toBottomOf="@+id/ie"
+        app:layout_constraintWidth_percent="0.095"
+        />
+
+    <TextView
+        android:id="@+id/leak"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center|right"
+        android:text="1:1.0"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/spo2"
+        app:layout_constraintRight_toRightOf="@+id/stCount"
+        app:layout_constraintLeft_toLeftOf="@+id/stCount"
+        app:layout_constraintTop_toBottomOf="@+id/mv"
+        app:layout_constraintWidth_percent="0.095"
+        />
+
+    <TextView
+        android:id="@+id/spo2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center|right"
+        android:text="1:1.0"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/bta51"
+        app:layout_constraintRight_toRightOf="@+id/stCount"
+        app:layout_constraintLeft_toLeftOf="@+id/stCount"
+        app:layout_constraintTop_toBottomOf="@+id/mv"
+        app:layout_constraintWidth_percent="0.095"
+        />
+
+    <!-- ######## I:E SPo2  End-->
     <com.xinming.mes.mesapp.views.MesCircularView
         android:id="@+id/bta11"
         android:layout_width="0dp"
