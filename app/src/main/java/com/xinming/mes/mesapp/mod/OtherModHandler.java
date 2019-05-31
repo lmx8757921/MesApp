@@ -1,14 +1,11 @@
 package com.xinming.mes.mesapp.mod;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.LineChart;
 import com.xinming.mes.mesapp.R;
-import com.xinming.mes.mesapp.charts.DynamicLineChartManager;
 import com.xinming.mes.mesapp.entity.RespiratorConfigDataVO;
 import com.xinming.mes.mesapp.entity.RespiratorDataVO;
 import com.xinming.mes.mesapp.views.MesCircularView;
@@ -31,18 +28,18 @@ public class OtherModHandler extends BaseModHandler {
 
                 pressureChartManager.addEntry(data.getPressure());
 
-                //I:E value
-                TextView txIeVal = v.findViewById(R.id.ie);
-                txIeVal.setText(data.getIe());
-                //MV value
-                TextView txMvVal = v.findViewById(R.id.mv);
-                txMvVal.setText(data.getMv());
-                //Leak value
-                TextView txLeakVal = v.findViewById(R.id.leak);
-                txLeakVal.setText(data.getLeak());
-                //SpO2 value
-                TextView txSpO2Val = v.findViewById(R.id.spo2);
-                txSpO2Val.setText(data.getSpo2());
+//                //I:E value
+//                TextView txIeVal = v.findViewById(R.id.ie);
+//                txIeVal.setText(data.getIe());
+//                //MV value
+//                TextView txMvVal = v.findViewById(R.id.mv);
+//                txMvVal.setText(data.getMv());
+//                //Leak value
+//                TextView txLeakVal = v.findViewById(R.id.leak);
+//                txLeakVal.setText(data.getLeak());
+//                //SpO2 value
+//                TextView txSpO2Val = v.findViewById(R.id.spo2);
+//                txSpO2Val.setText(data.getSpo2());
 
                 //设置Ipap单位
                 MesCircularView ipapView = v.findViewById(R.id.bta11);

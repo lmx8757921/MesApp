@@ -2,6 +2,8 @@ package com.xinming.mes.mesapp;
 
 import android.app.Application;
 
+import com.orhanobut.logger.DiskLogAdapter;
+import com.orhanobut.logger.Logger;
 import com.xinming.mes.mesapp.exception.MesExceptionHandler;
 import com.xinming.mes.mesapp.mod.IModHandler;
 
@@ -18,6 +20,7 @@ public class MesApp extends Application {
 
     public void onCreate(){
         super.onCreate();
+        Logger.addLogAdapter(new DiskLogAdapter());
         MesExceptionHandler handler = new MesExceptionHandler(getApplicationContext());
         Thread.setDefaultUncaughtExceptionHandler(handler);
     }

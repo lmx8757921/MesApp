@@ -1,7 +1,6 @@
 package com.xinming.mes.mesapp;
 
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -19,42 +18,41 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.pic_mes_mod3_main_land);
         pb = (ProgressBar)findViewById(R.id.start_progressBar);
         v1 = View.inflate(this, R.layout.mes_mod1_main_land, null);
         v2 = View.inflate(this, R.layout.mes_mod2_main_land, null);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                pb.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        pb.setVisibility(View.GONE);
-                    }
-                },5000);
-
-                int i = 0;
-                while(true){
-                    SystemClock.sleep(5000);
-                    if(i%2==0){
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                setContentView(v1);
-                                updateView1(v1);
-                            }
-                        });
-
-                    }else{
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                setContentView(v2);
-                                updateView2(v2);
-                            }
-                        });
-
-                    }
-                     i++  ;
-                }
+//                pb.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        pb.setVisibility(View.GONE);
+//                    }
+//                },5000);
+//                int i = 0;
+//                while(true){
+//                    SystemClock.sleep(5000);
+//                    if(i%2==0){
+//                        runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                setContentView(v1);
+//                                updateView1(v1);
+//                            }
+//                        });
+//
+//                    }else{
+//                        runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                setContentView(v2);
+//                                updateView2(v2);
+//                            }
+//                        });
+//
+//                    }
+//                     i++  ;
+//                }
             }
         }).start();
 

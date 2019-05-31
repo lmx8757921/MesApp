@@ -36,7 +36,7 @@ public class MainActivityTest extends AppCompatActivity {
         dynamicLineChartManager2 = new DynamicLineChartManager(mChart2, names.get(1), colour.get(1));
         dynamicLineChartManager1.setYAxis(120, -60, 10);
         dynamicLineChartManager2.setYAxis(100, 0, 10);
-        //死循环添加数据
+//        死循环添加数据
         new Thread(new Runnable() {
             @Override
             public void run() {

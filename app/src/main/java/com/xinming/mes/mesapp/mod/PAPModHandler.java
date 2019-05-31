@@ -32,8 +32,8 @@ public class PAPModHandler extends BaseModHandler {
                 pressureChartManager.addEntry(data.getPressure());
 
                 //SpO2 value
-                TextView txSpO2Val = v.findViewById(R.id.spo2);
-                txSpO2Val.setText(data.getSpo2());
+//                TextView txSpO2Val = v.findViewById(R.id.spo2);
+//                txSpO2Val.setText(data.getSpo2());
 
                 //Cpap
                 TextView txCpap = v.findViewById(R.id.t11);
@@ -51,14 +51,14 @@ public class PAPModHandler extends BaseModHandler {
                 //首次加载更新如下数据,此数据是静态的,只刷新一次即可
                 if(firstLoad){
                     //I:E value
-                    TextView txIeVal = v.findViewById(R.id.ie);
-                    txIeVal.setText("--");
-                    //MV value
-                    TextView txMvVal = v.findViewById(R.id.mv);
-                    txMvVal.setText("--");
-                    //Leak value
-                    TextView txLeakVal = v.findViewById(R.id.leak);
-                    txLeakVal.setText("--");
+//                    TextView txIeVal = v.findViewById(R.id.ie);
+//                    txIeVal.setText("--");
+//                    //MV value
+//                    TextView txMvVal = v.findViewById(R.id.mv);
+//                    txMvVal.setText("--");
+//                    //Leak value
+//                    TextView txLeakVal = v.findViewById(R.id.leak);
+//                    txLeakVal.setText("--");
 
                     //Epap
                     TextView txEpap = v.findViewById(R.id.t21);
