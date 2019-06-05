@@ -8,18 +8,16 @@
 
     <TextView
         android:id="@+id/respircare_title"
-        android:layout_width="15dp"
+        android:layout_width="20dp"
         android:layout_height="0dp"
-        android:text="Respircare"
+        android:text="RESPIRCARE"
         android:textSize="28sp"
         android:lineSpacingMultiplier="0.8"
         android:ems="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.013"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/area1"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
         />
 
     <com.xinming.mes.mesapp.views.MesCircularView
@@ -28,7 +26,6 @@
         android:layout_height="0dp"
         android:background="@android:color/holo_green_dark"
         android:gravity="center"
-        android:text="area1"
         android:textSize="20sp"
         app:type="SpO2"
         app:unit="%"
@@ -40,17 +37,17 @@
         app:layout_constraintLeft_toRightOf="@+id/respircare_title"
         app:layout_constraintRight_toLeftOf="@+id/area2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.48" />
+        app:layout_constraintWidth_percent="0.46" />
 
     <TextView
         android:id="@+id/t1"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="88"
         android:textSize="40sp"
         android:textColor="@color/white"
         android:paddingBottom="25sp"
+        android:text=""
         app:layout_constraintTop_toTopOf="@+id/area1"
         app:layout_constraintLeft_toLeftOf="@+id/area1"
         app:layout_constraintRight_toRightOf="@+id/area1"
@@ -78,7 +75,6 @@
         android:layout_height="0dp"
         android:background="@color/blue"
         android:gravity="center"
-        android:text="area2"
         android:textSize="20sp"
         app:type="氧浓度"
         app:unit="%"
@@ -90,14 +86,14 @@
         app:layout_constraintLeft_toRightOf="@+id/area1"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.48" />
+        app:layout_constraintWidth_percent="0.46" />
 
     <TextView
         android:id="@+id/t2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="21"
+        android:text=""
         android:textSize="40sp"
         android:textColor="@color/white"
         android:paddingBottom="25sp"
@@ -107,12 +103,12 @@
         app:layout_constraintBottom_toBottomOf="@+id/area2" />
 
     <TextView
-        android:id="@+id/timeing1"
+        android:id="@+id/timingId"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="right"
-        android:text="10:49"
-        android:textSize="30sp"
+        android:text=""
+        android:textSize="15sp"
         android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="@+id/area2"
         app:layout_constraintLeft_toLeftOf="@+id/area2"
@@ -126,7 +122,6 @@
         android:layout_height="0dp"
         android:background="@android:color/holo_blue_light"
         android:gravity="center"
-        android:text="area3"
         android:textSize="20sp"
         app:type="流 量"
         app:unit="L/min"
@@ -138,17 +133,30 @@
         app:layout_constraintLeft_toRightOf="@+id/respircare_title"
         app:layout_constraintRight_toLeftOf="@+id/area4"
         app:layout_constraintTop_toBottomOf="@+id/area1"
-        app:layout_constraintWidth_percent="0.48" />
+        app:layout_constraintWidth_percent="0.46" />
 
     <TextView
         android:id="@+id/t3"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="18"
+        android:text=""
         android:textSize="40sp"
         android:textColor="@color/white"
         android:paddingBottom="25sp"
+        app:layout_constraintTop_toTopOf="@+id/area3"
+        app:layout_constraintLeft_toLeftOf="@+id/area3"
+        app:layout_constraintRight_toRightOf="@+id/area3"
+        app:layout_constraintBottom_toBottomOf="@+id/area3" />
+
+    <TextView
+        android:id="@+id/t31"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="right|bottom"
+        android:text=""
+        android:textSize="20sp"
+        android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="@+id/area3"
         app:layout_constraintLeft_toLeftOf="@+id/area3"
         app:layout_constraintRight_toRightOf="@+id/area3"
@@ -161,7 +169,6 @@
         android:layout_height="0dp"
         android:background="@color/orange"
         android:gravity="center"
-        android:text="area4"
         android:textSize="20sp"
         app:type="温 度"
         app:unit="℃"
@@ -173,14 +180,14 @@
         app:layout_constraintLeft_toRightOf="@+id/area3"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/area2"
-        app:layout_constraintWidth_percent="0.48" />
+        app:layout_constraintWidth_percent="0.46" />
 
     <TextView
         android:id="@+id/t4"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="88"
+        android:text=""
         android:textSize="40sp"
         android:textColor="@color/white"
         android:paddingBottom="25sp"
@@ -188,6 +195,21 @@
         app:layout_constraintLeft_toLeftOf="@+id/area4"
         app:layout_constraintRight_toRightOf="@+id/area4"
         app:layout_constraintBottom_toBottomOf="@+id/area4" />
+
+    <TextView
+        android:id="@+id/t41"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="right|bottom"
+        android:text=""
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/area4"
+        app:layout_constraintLeft_toLeftOf="@+id/area4"
+        app:layout_constraintRight_toRightOf="@+id/area4"
+        app:layout_constraintBottom_toBottomOf="@+id/area4"
+
+        />
 
 
 </android.support.constraint.ConstraintLayout>

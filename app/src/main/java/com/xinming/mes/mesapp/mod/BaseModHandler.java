@@ -3,11 +3,12 @@ package com.xinming.mes.mesapp.mod;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.orhanobut.logger.Logger;
 import com.xinming.mes.mesapp.R;
 import com.xinming.mes.mesapp.charts.DynamicLineChartManager;
 import com.xinming.mes.mesapp.entity.RespiratorConfigDataVO;
@@ -16,11 +17,13 @@ import com.xinming.mes.mesapp.entity.RespiratorDataVO;
 public abstract class BaseModHandler implements IModHandler {
     protected Context ctx = null;
     protected View v = null;
+    protected Handler mHandler = null;
     protected DynamicLineChartManager flowChartManager;
     protected DynamicLineChartManager pressureChartManager;
-    public BaseModHandler(Context ctx,View v){
+    public BaseModHandler(Context ctx,View v,Handler mHandler){
         this.ctx = ctx;
         this.v = v;
+        this.mHandler = mHandler;
     }
 
 
@@ -45,7 +48,7 @@ public abstract class BaseModHandler implements IModHandler {
      * c初始化图表控件
      */
     protected void initChart(){
-        Log.d(this.getClass().getSimpleName(),"initChart start");
+        Logger.d("initChart start");
         LineChart mFlowChart = (LineChart) v.findViewById(R.id.chart1);
         LineChart mPreChart = (LineChart) v.findViewById(R.id.chart2);
 
@@ -54,7 +57,7 @@ public abstract class BaseModHandler implements IModHandler {
 
         flowChartManager.setYAxis(120, -60, 10);
         pressureChartManager.setYAxis(100, 0, 10);
-        Log.d(this.getClass().getSimpleName(),"initChart end");
+        Logger.d("initChart end");
     }
 
     protected View getContentView(){
@@ -63,18 +66,18 @@ public abstract class BaseModHandler implements IModHandler {
     }
 
     protected  void  setContentView(){
-        Log.d(this.getClass().getSimpleName(),"setContentView start");
+        Logger.d("setContentView start");
         ((Activity)ctx).runOnUiThread(new Runnable() {
             public void run() {
                 if(getContentView() != v){
-                    Log.d(this.getClass().getSimpleName(),"If first to setContentView");
+                    Logger.d("If first to setContentView");
                     ((Activity)ctx).setContentView(v);
                 }else{
-                    Log.d(this.getClass().getSimpleName(),"If second not set");
+                    Logger.d("If second not set");
                 }
             }
         });
-        Log.d(this.getClass().getSimpleName(),"setContentView end");
+        Logger.d("setContentView end");
     }
 
 }

@@ -1,12 +1,12 @@
 package com.xinming.mes.mesapp.service;
 
-import android.util.Log;
-
-import com.xinming.mes.mesapp.MesApp;
+import com.orhanobut.logger.Logger;
 import com.xinming.mes.mesapp.entity.RespiratorConfigData;
 import com.xinming.mes.mesapp.entity.RespiratorConfigDataVO;
 import com.xinming.mes.mesapp.entity.RespiratorData;
 import com.xinming.mes.mesapp.entity.RespiratorDataVO;
+import com.xinming.mes.mesapp.exception.MesDataException;
+import com.xinming.mes.mesapp.io.MesInputStream;
 import com.xinming.mes.mesapp.mod.IModHandler;
 
 import java.io.IOException;
@@ -29,65 +29,65 @@ public class DataExecuterService {
      * @return
      * @throws IOException
      */
-    public void execRespiratorData(InputStream in) throws IOException {
-//            6	同步字
-        in.read(new byte[6]);
-//            2	信息字数
-        in.read(new byte[2]);
-//            1	目标地址
-        in.read(new byte[1]);
-//            1	源地址
-        in.read(new byte[1]);
-//            2	命令码
-        byte[] cmds = new byte[2];
-        in.read(cmds);
-        boolean isConfig = isConfig(cmds);
-//            2	命令码参数
-        in.read(new byte[2]);
-//            9	呼吸机序列号
-        in.read(new byte[9]);
-//            1	呼吸机型号
-        in.read(new byte[1]);
-//            6	同步字
-        in.read(new byte[6]);
-//            2	信息字数
-        in.read(new byte[2]);
-//            1	目标地址
-        in.read(new byte[1]);
-//            1	源地址
-        in.read(new byte[1]);
-//            2	命令码
-        in.read(new byte[2]);
-//            2	命令码参数
-        in.read(new byte[2]);
-//            9	呼吸机序列号
-        in.read(new byte[9]);
-        //配置数据下多读以下几个数据
-        if(isConfig){
-            //            1	呼吸机型号
-            in.read(new byte[1]);
-            //            11	呼吸机软件版本
-            in.read(new byte[11]);
-            //            7	当前时间
-            in.read(new byte[7]);
-            //            6	累计运行时间
-            in.read(new byte[6]);
-            //获取呼吸机数据
-            RespiratorConfigDataVO cfgVo = new RespiratorConfigDataVO();
-            setRespiratorDataConfig(in,cfgVo);
-            //更新显示配置数据
-            getModHandler(configData.getMode()).updateViewWithConfigData(cfgVo);
-        }else{
-            RespiratorData data = new RespiratorData();
-            RespiratorConfigDataVO cfgVo = new RespiratorConfigDataVO();
-            RespiratorDataVO vo = new RespiratorDataVO();
-            setRespiratorDataPackage(in,data,vo,cfgVo);
-            //更新显示数据
-            getModHandler(data.getMode()).updateViewWithPackageData(vo,cfgVo);
+    public void execRespiratorData(InputStream in) throws IOException, MesDataException {
+        Logger.d("start *****************");
+        if (in == null){
+            return;
         }
+        while(true){
+            //            6	同步字
+            int isEnd = in.read();
+            if(isEnd == -1){
+                break;
+            }
+            in.read(new byte[5]);
+//            2	信息字数
+            in.read(new byte[2]);
+//            1	目标地址
+            in.read(new byte[1]);
+//            1	源地址
+            in.read(new byte[1]);
+//            2	命令码
+            byte[] cmds = new byte[2];
+            in.read(cmds);
+            boolean isConfig = isConfig(cmds);
+//            2	命令码参数
+            in.read(new byte[2]);
+//            9	呼吸机序列号
+            in.read(new byte[9]);
+            //配置数据下多读以下几个数据
+            if(isConfig){
+                //获取呼吸机数据
+                RespiratorConfigDataVO cfgVo = new RespiratorConfigDataVO();
+                //            1	呼吸机型号
+                in.read(new byte[1]);
+                //            11	呼吸机软件版本
+                in.read(new byte[11]);
+                //            7	当前时间
+                byte[] bDatestimes = new byte[7];
+                in.read(bDatestimes);
+                String date = getDate(bDatestimes[0],bDatestimes[1],bDatestimes[2],bDatestimes[3]);
+                configData.setDateTime(date);
+                cfgVo.setDateTime(date);
+                //            6	累计运行时间
+                in.read(new byte[6]);
+                setRespiratorDataConfig(in,cfgVo);
+                //更新显示配置数据
+                getModHandler(configData.getMode()).updateViewWithConfigData(cfgVo);
+            }else{
+                RespiratorData data = new RespiratorData();
+                RespiratorConfigDataVO cfgVo = new RespiratorConfigDataVO();
+                RespiratorDataVO vo = new RespiratorDataVO();
+                setRespiratorDataPackage(in,data,vo,cfgVo);
+                //更新显示数据
+                getModHandler(configData.getMode()).updateViewWithPackageData(vo,cfgVo);
+            }
 
-        //读到流的结尾
-        readToEnd(in);
+            //读到流的结尾
+            readToEnd(in);
+
+        }
+        Logger.d("end *****************");
     }
 
 
@@ -97,12 +97,14 @@ public class DataExecuterService {
      * @return
      * @throws IOException
      */
-    private  void setRespiratorDataConfig(InputStream in,RespiratorConfigDataVO vo) throws IOException{
+    private  void setRespiratorDataConfig(InputStream in,RespiratorConfigDataVO vo) throws IOException, MesDataException {
         //  1	当前模式
         int mode = in.read();
         configData = new RespiratorConfigData();
         String modeName = getMode(mode);
+        Logger.d("modeName=",modeName);
         configData.setMode(modeName);
+        vo.setMode(modeName);
         byte[] bIpaps = null;
         byte[] bEpaps = null;
         byte[] bCpaps = null;
@@ -315,19 +317,19 @@ public class DataExecuterService {
 
         //IPAP EPAP CPAP与单位相关的,重新计算
         if(bIpaps != null){
-            double ipap =  getValueWithUnit(getShort(bIpaps),configData.getUnit());
+            double ipap =  getValueWithUnit(getInt(bIpaps),configData.getUnit());
             configData.setIpap(ipap);
             vo.setIpap(String.valueOf(ipap));
         }
 
         if(bEpaps != null){
-            double epap =  getValueWithUnit(getShort(bEpaps),configData.getUnit());
+            double epap =  getValueWithUnit(getInt(bEpaps),configData.getUnit());
             configData.setEpap(epap);
             vo.setEpap(String.valueOf(epap));
         }
 
         if(bCpaps != null){
-            double cpap =  getValueWithUnit(getShort(bCpaps),configData.getUnit());
+            double cpap =  getValueWithUnit(getInt(bCpaps),configData.getUnit());
             configData.setCpap(cpap);
             vo.setCpap(String.valueOf(cpap));
         }
@@ -388,7 +390,7 @@ public class DataExecuterService {
      * @param vo
      * @throws IOException
      */
-    private void setConfigData(InputStream in,RespiratorConfigDataVO vo) throws IOException{
+    private void setConfigData(InputStream in,RespiratorConfigDataVO vo) throws IOException, MesDataException {
 
 //        配置--临床设置	0x00	0x00：关
 //        0x01：开
@@ -420,18 +422,21 @@ public class DataExecuterService {
      * @return
      * @throws IOException
      */
-    private  void setRespiratorDataPackage(InputStream in,RespiratorData data,RespiratorDataVO vo,RespiratorConfigDataVO cfgVo) throws IOException{
-        //  1	当前模式
-        int mode = in.read();
-        String modeName = getMode(mode);
+    private  void setRespiratorDataPackage(InputStream in,RespiratorData data,RespiratorDataVO vo,RespiratorConfigDataVO cfgVo) throws IOException ,MesDataException{
+
+        String modeName = configData.getMode();
         data.setMode(modeName);
+        vo.setMode(modeName);
         if("HFlow".equals(modeName) || "LFlow".equals(modeName)){
 //                0--2	时、分、秒
-            in.read(new byte[3]);
+            byte[] timeBts = new byte[3];
+            in.read(timeBts);
+            data.setTime(getRespTime(timeBts));
+            vo.setTime(data.getTime());
 //                3--4	流量(-200 - +200) L/min
             byte[] flowBytes = new byte[2] ;
             in.read(flowBytes);
-            data.setFlow(getShort(flowBytes));
+            data.setFlow(getSignedInt(flowBytes));
             vo.setFlow(data.getFlow());
 //                5	温度
             int temperature = in.read();
@@ -448,21 +453,32 @@ public class DataExecuterService {
 
         }else if("CPAP".equals(modeName) || "APAP".equals(modeName)){
 //                0--2	时、分、秒
-            in.read(new byte[3]);
+            byte[] timeBts = new byte[3];
+            in.read(timeBts);
+            data.setTime(getRespTime(timeBts));
+            vo.setTime(data.getTime());
 //                3--4	目标压力
-           byte[] bDps = new byte[2];
+            byte[] bDps = new byte[2];
             in.read(bDps);
             if("APAP".equals(modeName)){
-                double dps =  getValueWithUnit(getShort(bDps),configData.getUnit());
+                double dps =  getValueWithUnit(getInt(bDps),configData.getUnit());
                 configData.setCpap(dps);
                 cfgVo.setCpap(String.valueOf(dps));
             }
 //                5--6	当前压力
-            in.read(new byte[2]);
+            byte[] bCps = new byte[2];
+            in.read(bCps);
+            double cps =  getValueWithUnit(getInt(bCps),configData.getUnit());
+            data.setCpap(cps);
+            vo.setCpap(String.valueOf(cps));
 //                7--8	当前流量
-            in.read(new byte[2]);
+            byte[] flowBytes = new byte[2] ;
+            in.read(flowBytes);
+            data.setFlow(getSignedInt(flowBytes));
+            vo.setFlow(data.getFlow());
 //                9	呼吸事件0，无；1低通气，2，呼吸暂停 4，鼾声5.中枢
-            in.read(new byte[1]);
+            int event = in.read();
+            setEvent(data,vo,event);
 //                10-11	潮气量(0-2500)mL
             in.read(new byte[2]);
 //                12	漏气量(0-99) L/min
@@ -487,15 +503,26 @@ public class DataExecuterService {
 
         }else{
 //                0--2	时、分、秒
-            in.read(new byte[3]);
+            byte[] timeBts = new byte[3];
+            in.read(timeBts);
+            data.setTime(getRespTime(timeBts));
+            vo.setTime(data.getTime());
 //                3--4	压力(0-350)0-35cmH2O
-            in.read(new byte[2]);
+            byte[] bPs = new byte[2];
+            in.read(bPs);
+            double cp =  getValueWithUnit(getInt(bPs),configData.getUnit());
+            data.setCpap(cp);
+            vo.setCpap(String.valueOf(cp));
+
 //                5--6	流量(-200 - +200) L/min
-            in.read(new byte[2]);
+            byte[] flowBytes = new byte[2] ;
+            in.read(flowBytes);
+            data.setFlow(getSignedInt(flowBytes));
+            vo.setFlow(data.getFlow());
 //                7--8	潮气量(0-2500)mL
             byte[] bmls = new byte[2];
             in.read(bmls);
-            data.setMl(getShort(bmls));
+            data.setMl(getInt(bmls));
             vo.setMl(String.valueOf(data.getMl()));
 //                9	漏气量(0-99) L/min
             int leak = in.read();
@@ -535,14 +562,13 @@ public class DataExecuterService {
 //                19--20	IPAP(40-400)4-40cmH2O测量值
             byte[] bIpaps = new byte[2];
             in.read(bIpaps);
-            double ipap =  getValueWithUnit(getShort(bIpaps),configData.getUnit());
+            double ipap =  getValueWithUnit(getInt(bIpaps),configData.getUnit());
             data.setIpap(ipap);
             vo.setIpap(String.valueOf(ipap));
 //            EPAP(2)
 //                21	EPAP(40-200)4-20cmH2O
-            byte[] bEpaps = new byte[2];
-            in.read(bEpaps);
-            double epap =  getValueWithUnit(getShort(bEpaps),configData.getUnit());
+            int e = in.read();
+            double epap =  getValueWithUnit(e,configData.getUnit());
             data.setEpap(epap);
             vo.setEpap(String.valueOf(epap));
 
@@ -554,7 +580,10 @@ public class DataExecuterService {
      * @param modeName
      * @return
      */
-    private IModHandler getModHandler(String modeName) {
+    private IModHandler getModHandler(String modeName) throws MesDataException{
+        if(!handlers.containsKey(modeName)){
+            throw new MesDataException("模式数据错误,请确认模式数据"+modeName+"的正确性!");
+        }
         return handlers.get(modeName);
     }
 
@@ -570,12 +599,105 @@ public class DataExecuterService {
         while (true) {
             a3 = in.read();
             if (isEnd(a1, a2, a3)) {
+                if(in instanceof MesInputStream){
+                    ((MesInputStream) in).logDatas();
+                }
                 break;
             }
             a1 = a2;
             a2 = a3;
-            Log.d("MesDataServer", "reading");
         }
+    }
+
+    /**
+     * 设置呼吸事件
+     * @param data
+     * @param vo
+     * @param event
+     * @throws MesDataException
+     */
+    private void setEvent(RespiratorData data,RespiratorDataVO vo,int event)throws MesDataException{
+        int low6 = event & 0x3F;
+        data.setEventLow(getEventLow (low6));
+        vo.setEventLow(data.getEventLow());
+
+        data.setEventHigh(getEventHigh(event));
+        vo.setEventHigh(data.getEventHigh());
+
+        data.setEventHighColor(getEventHighColor(event));
+        vo.setEventHighColor(data.getEventHighColor());
+
+    }
+
+    private String getEventLow(int low6){
+        String el = "";
+        //0，无；1低通气，2，呼吸暂停 4，鼾声5.中枢
+        if(low6 == 0){
+            el = "无";
+        }else if(low6 == 1){
+            el = "低通气";
+        }else if(low6 == 2){
+            el = "呼吸暂停";
+        }else if(low6 == 4){
+            el = "鼾声";
+        }else if(low6 == 5){
+            el = "中枢";
+        }
+        return el;
+    }
+
+    private String getEventHigh(int h) throws MesDataException{
+        String eh = "";
+        //主动/被动/待机 ：0xC0/ 0x40//0x00
+        int h8 = h & 0xc0;
+        if(h8 == 0xC0){
+            eh = "主动";
+        }else if(h8 == 0x40){
+            eh = "被动";
+        }else if(h8 == 0x00){
+            eh = "待机";
+        }else{
+            throw new MesDataException("getEventHigh数据错误,请确认呼吸事件高2位"+h8+"的正确性!");
+        }
+        return eh;
+    }
+
+    private String getEventHighColor(int h) throws MesDataException{
+        String eh = "";
+        //绿色/红色/白色：11B/ 01B //00B:
+        int h2 = h >>> 6;
+        if(h2 == 3){
+            eh = "绿色";
+        }else if(h2 == 1){
+            eh = "红色";
+        }else if(h2 == 0){
+            eh = "白色";
+        }else{
+            throw new MesDataException("getEventHighColor数据错误,请确认呼吸事件高2位"+h2+"的正确性!");
+        }
+        return eh;
+    }
+
+    private String getDate(byte byh,byte byl,byte bm,byte bd){
+        StringBuffer sb = new StringBuffer ();
+        sb.append(bcdToString(byh) );
+        sb.append(bcdToString(byl) );
+        sb.append("年");
+        sb.append(bcdToString(bm));
+        sb.append("月");
+        sb.append(bcdToString(bd));
+        sb.append("日");
+        return sb.toString();
+    }
+
+    private String getRespTime(byte[] bts){
+        StringBuffer sb = new StringBuffer();
+        sb.append(bcdToString(bts[0]));
+        sb.append(":");
+        sb.append(bcdToString(bts[1]));
+        sb.append(":");
+        sb.append(bcdToString(bts[2]));
+        return sb.toString();
     }
 
     /**
@@ -583,7 +705,7 @@ public class DataExecuterService {
      * @param m
      * @return
      */
-    private String getMode(int m){
+    private String getMode(int m) throws MesDataException{
         switch(m){
             case 0x00:return "S/T" ;
             case 0x01:return "T" ;
@@ -595,7 +717,7 @@ public class DataExecuterService {
             case 0x07:return "MVAPS" ;
             case 0x08:return "HFlow" ;
             case 0x09:return "LFlow" ;
-            default : throw new RuntimeException("getMode模式数据错误,请确认数据传解析的输正确性!");
+            default : throw new MesDataException("getMode模式数据错误,请确认模式数据"+m+"的正确性!");
         }
     }
 
@@ -604,23 +726,39 @@ public class DataExecuterService {
      * @param cmds
      * @return
      */
-    private  boolean  isConfig(byte[] cmds){
+    private  boolean  isConfig(byte[] cmds) throws MesDataException{
         if(cmds[0] == 0x01 && cmds[01] ==0x01){
             return true;
-        }else{
+        }else if(cmds[0] == 0x01 && cmds[01] ==0x02){
             return false;
+        }else{
+            throw new MesDataException("配置数据命令,请确认数据"+cmds[0] + "," +cmds[1] +"的正确性!");
         }
     }
 
     /**
-     * 双字节转成short型
+     * 双字节转成int型
      * @param b
      * @return
      */
-    private short getShort(byte[] b) {
-        return (short) (((b[1] << 8) | b[0] & 0xff));
+    private int getInt(byte[] b) {
+        return (b[0] & 0xff)* 256 + (b[1]& 0xff);
     }
 
+    /**
+     * 双字节转成有符号int型
+     * @param b
+     * @return
+     */
+    private int getSignedInt(byte[] b){
+        int i = ((b[0]&0x7f)*256 + (0xff & b[1]));
+        if(b[0] < 0){
+            return -i;
+        }
+        return i;
+
+
+    }
     /**
      * 根据单位取压力值
      * @param val
@@ -639,25 +777,25 @@ public class DataExecuterService {
     }
 
 
-    private String getUnit(int u){
+    private String getUnit(int u) throws MesDataException{
         if(u == 0x00){
-            return "kpa";
+            return "cmh2o";
         }else if(u == 0x01){
-            return "cmH2o";
+            return "kpa";
         }else if(u == 0x02){
             return "hpa";
         }else{
-            throw new RuntimeException("getUnit模式数据错误,请确认数据传解析的输正确性!");
+            throw new RuntimeException("getUnit单位数据错误,请确认单位数据"+u+"的正确性!");
         }
     }
 
-    private String getLanguage(int l){
+    private String getLanguage(int l) throws MesDataException{
         if(l == 0x00){
             return "中文";
         }else if(l == 0x01){
             return "英文";
         }else{
-            throw new RuntimeException("getLanguage模式数据错误,请确认数据传解析的输正确性!");
+            throw new RuntimeException("getLanguage语言数据错误,请确认语言数据"+l+"的正确性!");
         }
     }
 
@@ -687,11 +825,25 @@ public class DataExecuterService {
      * @return
      */
     private boolean isEnd(int a1, int a2, int a3) {
-        Log.d("", (char) a1 + "," + (char) a2 + "," + (char) a3);
+        //Logger.d("", (char) a1 + "," + (char) a2 + "," + (char) a3);
         if (a1 == 'E' && a2 == 'N' && a3 == 'D') {
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * BCD转成字符串
+     * @param b
+     * @return
+     */
+    private String bcdToString(byte b){
+        StringBuffer sb = new StringBuffer();
+        int h = ((b & 0xff) >> 4) + 48;
+        sb.append ((char) h);
+        int l = (b & 0x0f) + 48;
+        sb.append ((char) l);
+        return sb.toString () ;
     }
 }

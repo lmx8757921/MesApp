@@ -1,10 +1,11 @@
 package com.xinming.mes.mesapp.mod;
 
 import android.content.Context;
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.xinming.mes.mesapp.R;
 import com.xinming.mes.mesapp.entity.RespiratorConfigDataVO;
 import com.xinming.mes.mesapp.entity.RespiratorDataVO;
@@ -15,40 +16,74 @@ import com.xinming.mes.mesapp.entity.RespiratorDataVO;
 
 public class HLModHandler extends BaseModHandler {
 
-    public HLModHandler(Context ctx, View v1){
-        super(ctx,v1);
+    public HLModHandler(Context ctx, View v1, Handler mHandler ){
+        super(ctx,v1,mHandler);
     }
+
     @Override
     protected void updatePackageData(final RespiratorDataVO data,final RespiratorConfigDataVO cfgData) {
-        v.post(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
-                Log.d(this.getClass().getSimpleName(),"更新单包数据 start");
-                TextView txTime = v.findViewById(R.id.area2);
+                Logger.d("更新单包数据 start");
+                //SPO2
+                TextView txSpO2 = v.findViewById(R.id.t1);
+                txSpO2.setText(data.getSpo2());
+
+                TextView txTime = v.findViewById(R.id.timingId);
                 //时间
                 txTime.setText(data.getTime());
 
                 TextView txFlow = v.findViewById(R.id.t3);
                 //流量
-                txFlow.setText(data.getFlow());
+                txFlow.setText(String.valueOf(data.getFlow()));
 
-                TextView txFio2 = v.findViewById(R.id.t4);
+                TextView txFio2 = v.findViewById(R.id.t2);
                 //氧浓度
                 txFio2.setText(data.getFio2());
 
-                TextView txTempture = v.findViewById(R.id.t5);
+                TextView txTempture = v.findViewById(R.id.t4);
                 //温度
-                txFio2.setText(String.valueOf(data.getTemperature()));
-                Log.d(this.getClass().getSimpleName(),"更新单包数据 end");
+                txTempture.setText(String.valueOf(data.getTemperature()));
+                Logger.d("更新单包数据 end");
             }
         });
+
+//        mHandler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                Logger.d("更新配置数据 start");
+//                TextView txFlow = v.findViewById(R.id.t31);
+//                //流量
+//                txFlow.setText("sb");
+//
+//                TextView txTempture = v.findViewById(R.id.t41);
+//                //温度
+//                txTempture.setText("dsb");
+//                Logger.d("更新配置数据 end");
+//
+//            }
+//        });
 
     }
 
     @Override
-    protected void updateConfigData(RespiratorConfigDataVO data) {
-        Log.d(this.getClass().getSimpleName(),"更新配置数据 start");
-        Log.d(this.getClass().getSimpleName(),"更新配置数据 end");
+    protected void updateConfigData(final RespiratorConfigDataVO data) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Logger.d("更新配置数据 start");
+                TextView txFlow = v.findViewById(R.id.t31);
+                //流量
+                txFlow.setText(data.getFlow());
+
+                TextView txTempture = v.findViewById(R.id.t41);
+                //温度
+                txTempture.setText(String.valueOf(data.getTemperature()));
+                Logger.d("更新配置数据 end");
+
+            }
+        });
     }
 
 

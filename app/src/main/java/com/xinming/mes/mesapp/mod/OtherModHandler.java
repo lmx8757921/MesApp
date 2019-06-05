@@ -1,10 +1,11 @@
 package com.xinming.mes.mesapp.mod;
 
 import android.content.Context;
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.xinming.mes.mesapp.R;
 import com.xinming.mes.mesapp.entity.RespiratorConfigDataVO;
 import com.xinming.mes.mesapp.entity.RespiratorDataVO;
@@ -12,34 +13,34 @@ import com.xinming.mes.mesapp.views.MesCircularView;
 
 public class OtherModHandler extends BaseModHandler {
 
-    public OtherModHandler(Context ctx, View v3){
-        super(ctx,v3);
+    public OtherModHandler(Context ctx, View v3,Handler mHandler){
+        super(ctx,v3,mHandler);
         initChart();
     }
     @Override
     protected void updatePackageData(final RespiratorDataVO data,final RespiratorConfigDataVO cfgData) {
+
         //更新单包数据
-        v.post(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
-                Log.d(this.getClass().getSimpleName(),"更新单包数据 start");
-
+                Logger.d("更新单包数据 start");
                 flowChartManager.addEntry(data.getFlow());
 
                 pressureChartManager.addEntry(data.getPressure());
 
-//                //I:E value
-//                TextView txIeVal = v.findViewById(R.id.ie);
-//                txIeVal.setText(data.getIe());
-//                //MV value
-//                TextView txMvVal = v.findViewById(R.id.mv);
-//                txMvVal.setText(data.getMv());
-//                //Leak value
-//                TextView txLeakVal = v.findViewById(R.id.leak);
-//                txLeakVal.setText(data.getLeak());
-//                //SpO2 value
-//                TextView txSpO2Val = v.findViewById(R.id.spo2);
-//                txSpO2Val.setText(data.getSpo2());
+                //I:E value
+                TextView txIeVal = v.findViewById(R.id.ie);
+                txIeVal.setText(data.getIe());
+                //MV value
+                TextView txMvVal = v.findViewById(R.id.mv);
+                txMvVal.setText(data.getMv());
+                //Leak value
+                TextView txLeakVal = v.findViewById(R.id.leak);
+                txLeakVal.setText(data.getLeak());
+                //SpO2 value
+                TextView txSpO2Val = v.findViewById(R.id.spo2);
+                txSpO2Val.setText(data.getSpo2());
 
                 //设置Ipap单位
                 MesCircularView ipapView = v.findViewById(R.id.bta11);
@@ -64,21 +65,23 @@ public class OtherModHandler extends BaseModHandler {
                 //潮气量
                 TextView txFio2 = v.findViewById(R.id.t51);
                 txFio2.setText(data.getFio2());
-
-
-
-                Log.d(this.getClass().getSimpleName(),"更新单包数据 end");
+                Logger.d("更新单包数据 end");
             }
         });
+
     }
 
     @Override
     protected void updateConfigData(final RespiratorConfigDataVO data) {
+
         //更新配置数据
-        v.post(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
-                Log.d(this.getClass().getSimpleName(),"更新配置数据 start");
+                Logger.d("更新配置数据 start");
+                //  mode title
+                TextView txMode = v.findViewById(R.id.area1);
+                txMode.setText( "模式     " + data.getMode() );
 
                 //IPAP mode
                 TextView txIpapName = v.findViewById(R.id.t12);
@@ -114,7 +117,7 @@ public class OtherModHandler extends BaseModHandler {
                 //FiO2 value
                 TextView txFio2Val = v.findViewById(R.id.t53);
                 txFio2Val.setText(data.getFio2());
-                Log.d(this.getClass().getSimpleName(),"更新配置数据 end");
+                Logger.d("更新配置数据 end");
             }
         });
 

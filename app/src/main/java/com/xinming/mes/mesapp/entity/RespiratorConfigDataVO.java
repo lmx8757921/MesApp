@@ -12,6 +12,7 @@ public class RespiratorConfigDataVO {
     String unit = "cmH2o";//单位
     String language = "中文";//语言
     String mode = "";//模式
+    String dateTime ="";
 
     public String getIpap() {
         return ipap;
@@ -99,5 +100,13 @@ public class RespiratorConfigDataVO {
 
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 }

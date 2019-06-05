@@ -16,6 +16,9 @@ public class RespiratorData {
     int leak = 0;//漏气量
     int spo2 = 0;//血氧
     int temperature = 0;//温度
+    String eventLow = "";//呼吸事件低6位
+    String eventHigh = "";//呼吸事件高2位：0xC0      主动/被动/待机
+    String eventHighColor = "";//绿色/红色/白色0xC0/ 0x40//0x00： 11B/ 01B //00B:
 
 
 
@@ -137,5 +140,29 @@ public class RespiratorData {
 
     public void setTemperature(int temperature) {
         this.temperature = temperature;
+    }
+
+    public String getEventLow() {
+        return eventLow;
+    }
+
+    public void setEventLow(String eventLow) {
+        this.eventLow = eventLow;
+    }
+
+    public String getEventHigh() {
+        return eventHigh;
+    }
+
+    public void setEventHigh(String eventHigh) {
+        this.eventHigh = eventHigh;
+    }
+
+    public String getEventHighColor() {
+        return eventHighColor;
+    }
+
+    public void setEventHighColor(String eventHighColor) {
+        this.eventHighColor = eventHighColor;
     }
 }
