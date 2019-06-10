@@ -450,6 +450,16 @@ public class DataExecuterService {
             in.read(new byte[1]);
 //                8	脉率0-255
             in.read(new byte[1]);
+//            当前工作时间 分钟
+            int t0 = in.read();
+            int t1 = in.read();
+            int t2 = in.read();
+            int t3 = in.read();
+            int t = t0 *256*256*256 + t1*256*256 + t2 *256 + t3;
+            data.setWorkTime(t);
+            vo.setWorkTime(getWorkTime(t));
+            //读9个无用字节
+            in.read(new byte[9]);
 
         }else if("CPAP".equals(modeName) || "APAP".equals(modeName)){
 //                0--2	时、分、秒
@@ -500,6 +510,9 @@ public class DataExecuterService {
             double cpap =  getValueWithUnit(iCpap,configData.getUnit());
             data.setCpap(cpap);
             vo.setCpap(String.valueOf(cpap));
+
+            //读3个无用字节
+            in.read(new byte[3]);
 
         }else{
 //                0--2	时、分、秒
@@ -573,7 +586,17 @@ public class DataExecuterService {
             vo.setEpap(String.valueOf(epap));
 
         }
+
+        //机器状态
+        int status = in.read();
+        data.setStatus(status);
+        vo.setStatus(getStatus(status));
+        //报警
+        int alarm = in.read();
+        data.setAlarm(alarm);
+        vo.setAlarm(getAlarm(alarm));
     }
+
 
     /**
      * 获取不同模式下的业务处理Handler
@@ -618,15 +641,28 @@ public class DataExecuterService {
      */
     private void setEvent(RespiratorData data,RespiratorDataVO vo,int event)throws MesDataException{
         int low6 = event & 0x3F;
-        data.setEventLow(getEventLow (low6));
-        vo.setEventLow(data.getEventLow());
+        data.setEvent(event);
+        vo.setEventLow(getEventLow (low6));
+        vo.setEventHigh(getEventHigh(event));
+        vo.setEventHighColor(getEventHighColor(event));
 
-        data.setEventHigh(getEventHigh(event));
-        vo.setEventHigh(data.getEventHigh());
+    }
 
-        data.setEventHighColor(getEventHighColor(event));
-        vo.setEventHighColor(data.getEventHighColor());
+    private String getWorkTime(int t){
+        StringBuilder sb = new StringBuilder();
+        int tMod = t % 60;
+        if(t> 60){
+            int h = t/60;
+            int hMod = h%24;
+            if(h > 24) {
+                int day = h/24;
+                sb.append(day).append("天");
+            }
+            sb.append(hMod).append("小时");
+        }
+        sb.append(tMod).append("分");
 
+        return sb.toString();
     }
 
     private String getEventLow(int low6){
@@ -676,6 +712,70 @@ public class DataExecuterService {
             throw new MesDataException("getEventHighColor数据错误,请确认呼吸事件高2位"+h2+"的正确性!");
         }
         return eh;
+    }
+
+    private String getStatus(int status) throws  MesDataException{
+        //0待机 1预热中 2工作中 3干燥管路 4转运中
+        if(status == 0){
+            return "待机";
+        }else if(status == 1){
+            return "预热中";
+        }else if(status == 2){
+            return "工作中";
+        }else if(status == 3){
+            return "干燥管路";
+        }else if(status == 4){
+            return "转运中";
+        }else{
+            throw new MesDataException("状态数据错误,请确认状态数据"+status+"的正确性!");
+        }
+    }
+
+    private String getAlarm(int alarm) throws  MesDataException{
+        //1内部故障	2管道脱落   3窒息报警 	4超温报警	5高吸气压力	6高呼吸频率 	7低呼吸频率        	8低通气量	9呼吸管路	10漏气报警	11阻塞报警	12氧气浓度低	13氧气浓度高	14无法达到目标流量	15检查水量	16无法达到目标温度	17检查工作条件	18切换患者界面
+        switch (alarm){
+            case 0:
+                return "无报警";
+            case 1:
+                return "内部故障";
+            case 2:
+                return "管道脱落";
+            case 3:
+                return "窒息报警";
+            case 4:
+                return "超温报警";
+            case 5:
+                return "高吸气压力";
+            case 6:
+                return "高呼吸频率";
+            case 7:
+                return "低呼吸频率";
+            case 8:
+                return "低通气量";
+            case 9:
+                return "呼吸管路";
+            case 10:
+                return "漏气报警";
+            case 11:
+                return "阻塞报警";
+            case 12:
+                return "氧气浓度低";
+            case 13:
+                return "氧气浓度高";
+            case 14:
+                return "无法达到目标流量";
+            case 15:
+                return "检查水量";
+            case 16:
+                return "无法达到目标温度";
+            case 17:
+                return "检查工作条件";
+            case 18:
+                return "切换患者界面";
+            default:
+                throw new MesDataException("报警数据错误,请确认报警数据"+alarm+"的正确性!");
+        }
+
     }
 
     private String getDate(byte byh,byte byl,byte bm,byte bd){

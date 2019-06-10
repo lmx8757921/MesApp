@@ -16,9 +16,10 @@ public class RespiratorData {
     int leak = 0;//漏气量
     int spo2 = 0;//血氧
     int temperature = 0;//温度
-    String eventLow = "";//呼吸事件低6位
-    String eventHigh = "";//呼吸事件高2位：0xC0      主动/被动/待机
-    String eventHighColor = "";//绿色/红色/白色0xC0/ 0x40//0x00： 11B/ 01B //00B:
+    int event = 0;//呼吸事件
+    int status = 0;//机器状态
+    int alarm = 0;//报警
+    int workTime=0;//当前工作时间 分钟
 
 
 
@@ -142,27 +143,35 @@ public class RespiratorData {
         this.temperature = temperature;
     }
 
-    public String getEventLow() {
-        return eventLow;
+    public int getEvent() {
+        return event;
     }
 
-    public void setEventLow(String eventLow) {
-        this.eventLow = eventLow;
+    public void setEvent(int event) {
+        this.event = event;
     }
 
-    public String getEventHigh() {
-        return eventHigh;
+    public int getStatus() {
+        return status;
     }
 
-    public void setEventHigh(String eventHigh) {
-        this.eventHigh = eventHigh;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getEventHighColor() {
-        return eventHighColor;
+    public int getAlarm() {
+        return alarm;
     }
 
-    public void setEventHighColor(String eventHighColor) {
-        this.eventHighColor = eventHighColor;
+    public void setAlarm(int alarm) {
+        this.alarm = alarm;
+    }
+
+    public int getWorkTime() {
+        return workTime;
+    }
+
+    public void setWorkTime(int workTime) {
+        this.workTime = workTime;
     }
 }

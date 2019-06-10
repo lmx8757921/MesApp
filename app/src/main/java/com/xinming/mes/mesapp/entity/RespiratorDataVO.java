@@ -19,6 +19,10 @@ public class RespiratorDataVO {
     String eventLow = "";//呼吸事件低6位
     String eventHigh = "";//呼吸事件高2位：0xC0      主动/被动/待机
     String eventHighColor = "";//绿色/红色/白色0xC0/ 0x40//0x00： 11B/ 01B //00B:
+    String status = "";//机器状态 0待机 1预热中 2工作中 3干燥管路 4转运中
+    String alarm = "";//报警 1内部故障	2管道脱落   3窒息报警 	4超温报警	5高吸气压力	6高呼吸频率 	7低呼吸频率        	8低通气量	9呼吸管路	10漏气报警	11阻塞报警	12氧气浓度低	13氧气浓度高	14无法达到目标流量	15检查水量	16无法达到目标温度	17检查工作条件	18切换患者界面
+    String workTime = "";//当前工作时间 分钟
+
 
     public String getTime() {
         return time;
@@ -162,5 +166,29 @@ public class RespiratorDataVO {
 
     public void setEventHighColor(String eventHighColor) {
         this.eventHighColor = eventHighColor;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getAlarm() {
+        return alarm;
+    }
+
+    public void setAlarm(String alarm) {
+        this.alarm = alarm;
+    }
+
+    public String getWorkTime() {
+        return workTime;
+    }
+
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
     }
 }

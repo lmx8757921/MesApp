@@ -3,10 +3,18 @@ package com.xinming.mes.mesapp;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+import com.xinming.mes.mesapp.charts.MesFPChartView;
+import com.xinming.mes.mesapp.entity.ChartData;
+import com.xinming.mes.mesapp.exception.MesExceptionHandler;
+
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,16 +23,108 @@ public class MainActivity extends AppCompatActivity {
     private View v1 = null;
 
     private  View  v2 =null;
+
+    /**
+     * 点击启动按钮，启动服务
+     */
+    public void test1(View v){
+        Logger.d("test1 start !");
+        MesFPChartView chart = (MesFPChartView)findViewById(R.id.chart1);
+        ChartData d = new ChartData();
+        d.setData(20);
+        d.setColor("红色");
+        d.setTime(new Date());
+        chart.addData(d);
+        sleep(300);
+
+        d = new ChartData();
+        d.setData(20);
+        d.setColor("白色");
+        d.setTime(new Date());
+        chart.addData(d);
+        sleep(300);
+
+        d = new ChartData();
+        d.setData(100);
+        d.setColor("白色");
+        d.setTime(new Date());
+        chart.addData(d);
+        sleep(200);
+
+        d = new ChartData();
+        d.setData(-20);
+        d.setColor("绿色");
+        d.setTime(new Date());
+        chart.addData(d);
+        sleep(200);
+
+        chart.invalidate();
+
+        Logger.d("test1 end !");
+    }
+
+    public void test2(View v){
+
+        Logger.d("test2 start !");
+        MesFPChartView chart = (MesFPChartView)findViewById(R.id.chart2);
+        ChartData d = new ChartData();
+        d.setData(20);
+        d.setColor("红色");
+        d.setTime(new Date());
+        chart.addData(d);
+        sleep(300);
+
+        d = new ChartData();
+        d.setData(20);
+        d.setColor("白色");
+        d.setTime(new Date());
+        chart.addData(d);
+        sleep(300);
+
+        d = new ChartData();
+        d.setData(150);
+        d.setColor("白色");
+        d.setTime(new Date());
+        chart.addData(d);
+        sleep(200);
+
+        d = new ChartData();
+        d.setData(-20);
+        d.setColor("绿色");
+        d.setTime(new Date());
+        chart.addData(d);
+        sleep(200);
+
+        chart.invalidate();
+
+        Logger.d("test2 end !");
+    }
+
+    private void sleep(long l){
+        try {
+            Thread.sleep(l);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Logger.d("started  ---s");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pic_mes_mod3_main_land);
-        pb = (ProgressBar)findViewById(R.id.start_progressBar);
-        v1 = View.inflate(this, R.layout.mes_mod1_main_land, null);
-        v2 = View.inflate(this, R.layout.mes_mod2_main_land, null);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();// 隐藏ActionBar
+        MesExceptionHandler handler = new MesExceptionHandler(this);
+        Thread.setDefaultUncaughtExceptionHandler(handler);
+        setContentView(R.layout.activity_mes);
+
+        Logger.d("started");
+//        pb = (ProgressBar)findViewById(R.id.start_progressBar);
+//        v1 = View.inflate(this, R.layout.mes_mod1_main_land, null);
+//        v2 = View.inflate(this, R.layout.mes_mod2_main_land, null);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 //                pb.postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -53,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                     i++  ;
 //                }
-            }
-        }).start();
+//            }
+//        }).start();
 
 
     }
