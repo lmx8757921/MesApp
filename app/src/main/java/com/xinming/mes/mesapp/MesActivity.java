@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -67,6 +69,8 @@ public class MesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Logger.d("onCreate start !");
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();// 隐藏ActionBar
         MesExceptionHandler handler = new MesExceptionHandler(this);
         Thread.setDefaultUncaughtExceptionHandler(handler);
@@ -99,8 +103,8 @@ public class MesActivity extends AppCompatActivity {
      * 初始化各模式的handler
      */
     private void initModHandlers(){
-        View v1 = View.inflate(this, R.layout.mes_mod1_other_land, null);
-        View v2 = View.inflate(this, R.layout.mes_mod2_main_land, null);
+//        View v1 = View.inflate(this, R.layout.mes_mod1_other_land, null);
+        View v1 = View.inflate(this, R.layout.mes_mod2_main_land, null);
         View v3 = View.inflate(this, R.layout.mes_mod3_main_land, null);
         IModHandler hlModHandler = new HLModHandler(this,v1,mHandler);
         IModHandler papModHandler = new PAPModHandler(this,v3,mHandler);

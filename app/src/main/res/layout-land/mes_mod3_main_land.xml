@@ -30,6 +30,9 @@
         android:id="@+id/area2"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:textColor="@color/yellow"
+        android:textSize="20sp"
+        android:gravity="center"
         android:background="@mipmap/time_mod2"
         app:layout_constraintBottom_toTopOf="@+id/chart1"
         app:layout_constraintHeight_percent="0.1"
@@ -39,26 +42,36 @@
         app:layout_constraintWidth_percent="0.48" />
 
 
-    <com.github.mikephil.charting.charts.LineChart
+    <com.xinming.mes.mesapp.charts.MesFPChartView
         android:id="@+id/chart1"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:background="@color/green"
+        app:layout_constraintTop_toBottomOf="@id/area1"
         app:layout_constraintBottom_toTopOf="@+id/chart2"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHeight_percent="0.3"
-        app:layout_constraintWidth_percent="0.75" />
-    <com.github.mikephil.charting.charts.LineChart
+        app:layout_constraintWidth_percent="0.78"
+        app:type="F"
+        app:unit="L/min"
+        />
+    <com.xinming.mes.mesapp.charts.MesFPChartView
         android:id="@+id/chart2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/chart1"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:background="@color/green"
+        app:layout_constraintBottom_toTopOf="@+id/bta11"
+        app:layout_constraintTop_toBottomOf="@id/chart1"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHeight_percent="0.3"
-        app:layout_constraintWidth_percent="0.75" />
+        app:layout_constraintWidth_percent="0.78"
+        app:type="P"
+        app:unit="cmh2o"
+        />
     <com.xinming.mes.mesapp.views.MesStModCountView
         android:id="@+id/stCount"
         android:layout_width="0dp"
@@ -145,6 +158,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.19"
         app:layout_constraintHeight_percent="0.3"
+        app:offsetY="-30"
         app:type=""
         app:unit=""
         app:unitSize="40" />
@@ -152,7 +166,7 @@
         android:id="@+id/t11"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingBottom="5sp"
+        android:paddingBottom="25sp"
         android:gravity="center"
         android:text="--"
         android:textSize="25sp"
@@ -202,6 +216,7 @@
         app:layout_constraintLeft_toRightOf="@id/bta11"
         app:layout_constraintTop_toTopOf="@+id/bta11"
         app:layout_constraintWidth_percent="0.19"
+        app:offsetY="-30"
         app:unit=""
         app:unitSize="40" />
 
@@ -209,7 +224,7 @@
         android:id="@+id/t21"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingBottom="5sp"
+        android:paddingBottom="25sp"
         android:gravity="center"
         android:text="--"
         android:textSize="25sp"
@@ -259,13 +274,14 @@
         app:layout_constraintLeft_toRightOf="@id/bta21"
         app:layout_constraintTop_toTopOf="@+id/bta11"
         app:layout_constraintWidth_percent="0.19"
+        app:offsetY="-30"
         app:unit=""
         app:unitSize="40" />
     <TextView
         android:id="@+id/t31"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingBottom="5sp"
+        android:paddingBottom="25sp"
         android:gravity="center"
         android:text="--"
         android:textSize="25sp"
@@ -315,7 +331,7 @@
         app:layout_constraintTop_toTopOf="@+id/bta11"
         app:layout_constraintLeft_toRightOf="@id/bta31"
         app:layout_constraintWidth_percent="0.19"
-
+        app:offsetY="-30"
         app:unit=""
         app:unitSize="40" />
 
@@ -324,7 +340,7 @@
         android:id="@+id/t41"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingBottom="5sp"
+        android:paddingBottom="25sp"
         android:gravity="center"
         android:text="--"
         android:textSize="25sp"
@@ -374,7 +390,7 @@
         app:layout_constraintRight_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/bta11"
         app:layout_constraintWidth_percent="0.19"
-
+        app:offsetY="-30"
         app:unit="%"
         app:unitSize="40" />
 
@@ -383,7 +399,7 @@
         android:id="@+id/t51"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingBottom="5sp"
+        android:paddingBottom="25sp"
         android:gravity="center"
         android:text="--"
         android:textSize="25sp"

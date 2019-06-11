@@ -86,6 +86,7 @@ public class MesDataServer {
                 Logger.d("网络异常日志结束******");
             } catch(MesDataException me){
                 Logger.e("MES数据解析错误："+me.getMessage());
+                MesApp.showAlert(ctx,"MES数据解析错误：",me.getMessage());
                 Logger.d("MES数据解析错误日志结束######");
             }
             catch (Exception e){

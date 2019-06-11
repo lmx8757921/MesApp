@@ -16,7 +16,7 @@ import com.xinming.mes.mesapp.entity.RespiratorDataVO;
 
 public class HLModHandler extends BaseModHandler {
 
-    public HLModHandler(Context ctx, View v1, Handler mHandler ){
+    public HLModHandler(Context ctx, View v1, Handler mHandler){
         super(ctx,v1,mHandler);
     }
 
@@ -30,9 +30,17 @@ public class HLModHandler extends BaseModHandler {
                 TextView txSpO2 = v.findViewById(R.id.t1);
                 txSpO2.setText(data.getSpo2());
 
-                TextView txTime = v.findViewById(R.id.timingId);
-                //时间
-                txTime.setText(data.getTime());
+                TextView txTime = v.findViewById(R.id.workingtime);
+                //工作时间
+                txTime.setText(data.getWorkTime());
+
+                //报警
+                TextView txAlarm = v.findViewById(R.id.alarm);
+                txAlarm.setText(data.getAlarm());
+
+                //状态
+                TextView txStatus = v.findViewById(R.id.status);
+                txStatus.setText(data.getStatus());
 
                 TextView txFlow = v.findViewById(R.id.t3);
                 //流量
@@ -49,21 +57,6 @@ public class HLModHandler extends BaseModHandler {
             }
         });
 
-//        mHandler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                Logger.d("更新配置数据 start");
-//                TextView txFlow = v.findViewById(R.id.t31);
-//                //流量
-//                txFlow.setText("sb");
-//
-//                TextView txTempture = v.findViewById(R.id.t41);
-//                //温度
-//                txTempture.setText("dsb");
-//                Logger.d("更新配置数据 end");
-//
-//            }
-//        });
 
     }
 
@@ -86,5 +79,39 @@ public class HLModHandler extends BaseModHandler {
         });
     }
 
+
+    protected void init(){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                TextView txSpO2 = v.findViewById(R.id.t1);
+                txSpO2.setText("");
+
+                TextView txTime = v.findViewById(R.id.workingtime);
+                //工作时间
+                txTime.setText("");
+
+                //报警
+                TextView txAlarm = v.findViewById(R.id.alarm);
+                txAlarm.setText("");
+
+                //状态
+                TextView txStatus = v.findViewById(R.id.status);
+                txStatus.setText("");
+
+                TextView txFlow = v.findViewById(R.id.t3);
+                //流量
+                txFlow.setText("");
+
+                TextView txFio2 = v.findViewById(R.id.t2);
+                //氧浓度
+                txFio2.setText("");
+
+                TextView txTempture = v.findViewById(R.id.t4);
+                //温度
+                txTempture.setText("");
+            }
+        });
+    }
 
 }

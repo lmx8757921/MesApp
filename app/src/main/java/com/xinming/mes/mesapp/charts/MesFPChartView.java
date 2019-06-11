@@ -112,8 +112,13 @@ public class MesFPChartView extends View {
         max = currentTemplete[0];
         min = currentTemplete[1];
 
-        mTextPaint.setTextSize(20);
-        mTextPaint.setTextAlign(Paint.Align.CENTER);
+        mTextPaint.setTextSize(30);
+        mTextPaint.setTextAlign(Paint.Align.RIGHT);
+        mLinePaint.setStrokeWidth(5);
+
+        mLinePaint.setStyle(Paint.Style.STROKE);
+        mLinePaint.setColor(Color.BLACK);
+        mLinePaint.setStrokeWidth(5);
 
     }
 
@@ -162,7 +167,7 @@ public class MesFPChartView extends View {
 
         contentWidth = getWidth() - paddingLeft - paddingRight;
         contentHeight = getHeight() - paddingTop - paddingBottom;
-        cXLength = (float)(contentWidth * 0.8 - mTextPaint.getTextSize()*2);
+        cXLength = (float)(contentWidth * 0.9 - mTextPaint.getTextSize()*2);
         cYLength = contentHeight - mTextPaint.getTextSize()*2 ;
         //判断数据范围，越界使用新模板，否则使用老模板
         judgeDatasScope();
@@ -177,11 +182,9 @@ public class MesFPChartView extends View {
      * @param canvas
      */
     private void drawCoordinate(Canvas canvas){
-        mLinePaint.setStyle(Paint.Style.STROKE);
-        mLinePaint.setColor(Color.BLACK);
-        mLinePaint.setStrokeWidth(5);
-        float startX = (float)(contentWidth *0.2);
-        float startY = (float)(cYLength - mTextPaint.getTextSize());
+
+        float startX = (float)(contentWidth *0.1);
+        float startY = (float)(contentHeight - mTextPaint.getTextSize());
 
         //画纵坐标轴Y
         canvas.drawLine(startX,startY,startX, mTextPaint.getTextSize(),mLinePaint);
@@ -195,12 +198,11 @@ public class MesFPChartView extends View {
         x0 = startX;
         xEnd = startX + cXLength;
         canvas.drawLine(x0,y0,contentWidth,y0,mLinePaint);
-        canvas.drawText("0",startX-mTextPaint.getTextSize() * String.valueOf(max).length(),y0,mTextPaint);
+        canvas.drawText("0",startX-mTextPaint.getTextSize(),y0,mTextPaint);
 
         //写类型和单位值文字在坐标轴左侧
-        canvas.drawText(type,(float)(contentWidth *0.1),mTextPaint.getTextSize(),mTextPaint);
-
-        canvas.drawText(unit,(float)(contentWidth *0.1),(float)(cYLength/2),mTextPaint);
+        canvas.drawText(type,(float) 40,mTextPaint.getTextSize(),mTextPaint);
+        canvas.drawText(unit,(float) (contentWidth * 0.08),(float)(cYLength/2),mTextPaint);
 
 //        mLinePaint.setAntiAlias(true);
         mLinePaint.setStrokeWidth(1);
@@ -216,7 +218,7 @@ public class MesFPChartView extends View {
         //第一条虚线在X轴上方
         canvas.drawPath(path, mLinePaint);
         //写数字,设定一个宽度
-        float textWidth = mTextPaint.getTextSize() * String.valueOf(max).length();
+        float textWidth = mTextPaint.getTextSize();
         canvas.drawText(String.valueOf(max/2),startX-textWidth,y,mTextPaint);
 
         y =  (float) (mTextPaint.getTextSize());

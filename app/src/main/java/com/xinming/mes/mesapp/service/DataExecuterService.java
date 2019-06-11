@@ -102,7 +102,7 @@ public class DataExecuterService {
         int mode = in.read();
         configData = new RespiratorConfigData();
         String modeName = getMode(mode);
-        Logger.d("modeName=",modeName);
+        Logger.d("modeName="+modeName);
         configData.setMode(modeName);
         vo.setMode(modeName);
         byte[] bIpaps = null;
@@ -735,7 +735,7 @@ public class DataExecuterService {
         //1内部故障	2管道脱落   3窒息报警 	4超温报警	5高吸气压力	6高呼吸频率 	7低呼吸频率        	8低通气量	9呼吸管路	10漏气报警	11阻塞报警	12氧气浓度低	13氧气浓度高	14无法达到目标流量	15检查水量	16无法达到目标温度	17检查工作条件	18切换患者界面
         switch (alarm){
             case 0:
-                return "无报警";
+                return "";
             case 1:
                 return "内部故障";
             case 2:

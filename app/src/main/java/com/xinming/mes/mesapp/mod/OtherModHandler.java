@@ -7,9 +7,13 @@ import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 import com.xinming.mes.mesapp.R;
+import com.xinming.mes.mesapp.charts.MesFPChartView;
+import com.xinming.mes.mesapp.entity.ChartData;
 import com.xinming.mes.mesapp.entity.RespiratorConfigDataVO;
 import com.xinming.mes.mesapp.entity.RespiratorDataVO;
 import com.xinming.mes.mesapp.views.MesCircularView;
+
+import java.util.Date;
 
 public class OtherModHandler extends BaseModHandler {
 
@@ -25,9 +29,22 @@ public class OtherModHandler extends BaseModHandler {
             @Override
             public void run() {
                 Logger.d("更新单包数据 start");
-                flowChartManager.addEntry(data.getFlow());
-
-                pressureChartManager.addEntry(data.getPressure());
+                //流量图表设置
+                ChartData fData = new ChartData();
+                fData.setTime(new Date());
+                fData.setData(data.getFlow());
+                fData.setColor(data.getEventHighColor());
+                MesFPChartView chartFlow = v.findViewById(R.id.chart1);
+                chartFlow.addData(fData);
+                chartFlow.invalidate();
+                //压力图表设置
+                ChartData pData = new ChartData();
+                pData.setTime(new Date());
+                pData.setData(data.getPressure());
+                pData.setColor(data.getEventHighColor());
+                MesFPChartView chartPressure = v.findViewById(R.id.chart2);
+                chartPressure.addData(pData);
+                chartPressure.invalidate();
 
                 //I:E value
                 TextView txIeVal = v.findViewById(R.id.ie);
@@ -65,6 +82,10 @@ public class OtherModHandler extends BaseModHandler {
                 //潮气量
                 TextView txFio2 = v.findViewById(R.id.t51);
                 txFio2.setText(data.getFio2());
+
+                // 报警
+                TextView txAlarm = v.findViewById(R.id.area2);
+                txAlarm.setText( "!!" + data.getAlarm() );
                 Logger.d("更新单包数据 end");
             }
         });
@@ -117,9 +138,67 @@ public class OtherModHandler extends BaseModHandler {
                 //FiO2 value
                 TextView txFio2Val = v.findViewById(R.id.t53);
                 txFio2Val.setText(data.getFio2());
+
+                //图表设置
+                MesFPChartView chartFlow = v.findViewById(R.id.chart1);
+                chartFlow.invalidate();
+
+                MesFPChartView chartPressure = v.findViewById(R.id.chart2);
+                chartPressure.setUnit(data.getUnit());
+                chartPressure.invalidate();
                 Logger.d("更新配置数据 end");
             }
         });
+    }
 
+    protected void init(){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                //图表初始化
+                MesFPChartView chartFlow = v.findViewById(R.id.chart1);
+                chartFlow.resetData();
+
+                MesFPChartView chartPressure = v.findViewById(R.id.chart2);
+                chartPressure.resetData();
+
+                //I:E value
+                TextView txIeVal = v.findViewById(R.id.ie);
+                txIeVal.setText("--");
+                //MV value
+                TextView txMvVal = v.findViewById(R.id.mv);
+                txMvVal.setText("--");
+                //Leak value
+                TextView txLeakVal = v.findViewById(R.id.leak);
+                txLeakVal.setText("--");
+                //SpO2 value
+                TextView txSpO2Val = v.findViewById(R.id.spo2);
+                txSpO2Val.setText("--");
+
+                //设置Ipap单位
+                MesCircularView ipapView = v.findViewById(R.id.bta11);
+                ipapView.setUnit("");
+                ipapView.invalidate();
+                //Ipap
+                TextView txIpap = v.findViewById(R.id.t11);
+                txIpap.setText("--");
+                //设置Epap单位
+                MesCircularView epapView = v.findViewById(R.id.bta21);
+                epapView.setUnit("");
+                epapView.invalidate();
+                //Epap
+                TextView txEpap = v.findViewById(R.id.t21);
+                txEpap.setText("--");
+                //呼吸频率
+                TextView txBpm = v.findViewById(R.id.t31);
+                txBpm.setText("--");
+                //潮气量
+                TextView txMl = v.findViewById(R.id.t41);
+                txMl.setText("--");
+                //潮气量
+                TextView txFio2 = v.findViewById(R.id.t51);
+                txFio2.setText("--");
+            }
+        });
     }
 }
