@@ -2,7 +2,7 @@ package com.xinming.mes.mesapp.entity;
 
 public class RespiratorData {
     String time = null;//时间
-    String mode = null;//模式
+    int mode = 0;//模式
     int flow = 0;//流量
     int pressure = 0;//压力
     double ipap = 0;//ipap测量值
@@ -31,11 +31,11 @@ public class RespiratorData {
         this.time = time;
     }
 
-    public String getMode() {
+    public int getMode() {
         return mode;
     }
 
-    public void setMode(String mode) {
+    public void setMode(int mode) {
         this.mode = mode;
     }
 

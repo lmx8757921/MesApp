@@ -4,6 +4,7 @@ package com.xinming.mes.mesapp.exception;
 import android.content.Context;
 
 import com.orhanobut.logger.Logger;
+import com.xinming.mes.mesapp.MesApp;
 
 /**
  * Created by Administrator on 2019/5/5.
@@ -33,6 +34,6 @@ public class MesExceptionHandler implements Thread.UncaughtExceptionHandler {
 //        }.start();
 
         Logger.e("程序异常:"+throwable.getMessage());
-        //MesApp.showAlert(context,"程序异常",throwable.getMessage());
+        MesApp.showAlert(context,"程序异常",throwable.getMessage());
     }
 }

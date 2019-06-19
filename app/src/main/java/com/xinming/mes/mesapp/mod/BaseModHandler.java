@@ -2,109 +2,103 @@ package com.xinming.mes.mesapp.mod;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Handler;
-import android.view.View;
+import android.util.DisplayMetrics;
 
 import com.orhanobut.logger.Logger;
-import com.xinming.mes.mesapp.charts.DynamicLineChartManager;
+import com.xinming.mes.mesapp.R;
+import com.xinming.mes.mesapp.charts.MesFPChartView;
+import com.xinming.mes.mesapp.entity.ChartData;
 import com.xinming.mes.mesapp.entity.RespiratorConfigDataVO;
 import com.xinming.mes.mesapp.entity.RespiratorDataVO;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Locale;
 
 public abstract class BaseModHandler implements IModHandler {
+
     protected Context ctx = null;
-    protected View v = null;
     protected Handler mHandler = null;
-    protected DynamicLineChartManager flowChartManager;
-    protected DynamicLineChartManager pressureChartManager;
+    protected String mode = null;
+    protected Locale language = Locale.SIMPLIFIED_CHINESE;
 
-    private String mode = null;
-    private String modeType = null;
-    private Map<String,String> types = new HashMap<>();
-
-    public BaseModHandler(Context ctx,View v,Handler mHandler){
+    public BaseModHandler(Context ctx, Handler mHandler) {
         this.ctx = ctx;
-        this.v = v;
         this.mHandler = mHandler;
-
-        types.put("S/T","mode3");
-        types.put("T","mode3");
-        types.put("S","mode3");
-        types.put("CPAP","mode3");
-        types.put("APAP","mode3");
-        types.put("PCV","mode3");
-        types.put("AutoS","mode3");
-        types.put("MVAPS","mode3");
-        types.put("HFlow","mode1");
-        types.put("LFlow","mode1");
     }
 
 
     @Override
-    public void updateViewWithPackageData(final RespiratorDataVO data,RespiratorConfigDataVO viewCfgData) {
-        updatePackageData(data,viewCfgData);
+    public void updateViewWithPackageData(final RespiratorDataVO data, RespiratorConfigDataVO viewCfgData) {
+        //检查模式
+        checkModeAndInit(viewCfgData.getMode());
+        updatePackageData(data, viewCfgData);
     }
 
     @Override
     public void updateViewWithConfigData(final RespiratorConfigDataVO data) {
 
+        //检查语言
+        checkLanguage(data.getLanguage());
+        //检查模式
+        checkModeAndInit(data.getMode());
         //更新配置数据
-        checkModeAndInit(data);
-        mode = data.getMode();
-        modeType = getModeType(mode);
         updateConfigData(data);
 
     }
 
-    protected abstract void updatePackageData(final RespiratorDataVO data,final RespiratorConfigDataVO cfgData);
+    @Override
+    public void updateViewWithChartData(final ChartData[] datas) {
+        //子类去实现
+        //更新单包数据
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Logger.d("更新图表数据 start");
+                //流量图表设置
+                MesFPChartView chartFlow = ((Activity) ctx).findViewById(R.id.chart1);
+                chartFlow.addData(datas[0]);
+                chartFlow.invalidate();
+
+                //压力图表设置
+                MesFPChartView chartPressure = ((Activity) ctx).findViewById(R.id.chart2);
+                chartPressure.addData(datas[1]);
+                chartPressure.invalidate();
+                Logger.d("更新图表数据 end");
+            }
+        });
+    }
+
+    protected abstract void updatePackageData(final RespiratorDataVO data, final RespiratorConfigDataVO cfgData);
 
     protected abstract void updateConfigData(final RespiratorConfigDataVO data);
 
-    protected abstract  void init();
+    protected abstract void setContentView();
 
 
-    /**
-     * c初始化图表控件
-     */
-    protected void initChart(){
-        Logger.d("initChart start");
-//        LineChart mFlowChart = (LineChart) v.findViewById(R.id.chart1);
-//        LineChart mPreChart = (LineChart) v.findViewById(R.id.chart2);
-//
-//        flowChartManager = new DynamicLineChartManager(mFlowChart, "流量", Color.CYAN);
-//        pressureChartManager = new DynamicLineChartManager(mPreChart, "压力", Color.GREEN);
-//
-//        flowChartManager.setYAxis(120, -60, 10);
-//        pressureChartManager.setYAxis(100, 0, 10);
-        Logger.d("initChart end");
-    }
-
-    protected void checkModeAndInit(final RespiratorConfigDataVO data){
-        String m = data.getMode();
-        if(!m.equals(mode)){
-            if(!getModeType(m).equals(modeType)){
-                setContentView(data);
-                init();
-            }
+    protected void checkModeAndInit(String m) {
+        if (!m.equals(mode)) {
+            setContentView();
+            mode = m;
+            //init();
         }
     }
 
-    private String getModeType(String mode){
-        return types.get(mode);
+    protected void checkLanguage(Locale l) {
+        if (language != l) {
+            language = l;
+            refreshViewLanguage(l);
+            setContentView();
+        }
     }
 
-    protected  void  setContentView(final RespiratorConfigDataVO data){
-        Logger.d("setContentView start");
-        ((Activity)ctx).runOnUiThread(new Runnable() {
-            public void run() {
-                ((Activity) ctx).setContentView(v);
-            }
-        });
-        Logger.d("setContentView end");
+    private void refreshViewLanguage(final Locale l) {
+        Resources resources = ctx.getResources();
+        Configuration config = resources.getConfiguration();
+        config.locale = l;
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        resources.updateConfiguration(config, dm);
     }
-
-
 
 }

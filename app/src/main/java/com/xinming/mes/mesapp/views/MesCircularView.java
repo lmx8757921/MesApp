@@ -76,7 +76,7 @@ public class MesCircularView extends View {
         cPaint.setColor(Color.WHITE);
         cPaint.setStrokeWidth(10);
 
-        int r = (contentWidth > contentHeight ) ? contentHeight/3 : contentHeight/3;
+        float r = (contentWidth > contentHeight ) ? (float)(contentHeight/3 * 1.1) :  (float)(contentHeight/3*1.1);
         canvas.drawCircle(contentWidth/2 + offsetX,contentHeight/2+offsetY,r,cPaint);
         mTextPaint.setColor(Color.WHITE);//设置画笔颜色
         mTextPaint.setStrokeWidth(30);
@@ -94,7 +94,7 @@ public class MesCircularView extends View {
             mTextPaint.setTextAlign(Paint.Align.CENTER);
             canvas.drawText(unit,
                     contentWidth/2 + offsetX,
-                    contentHeight/2 + r - unitSize/2 +offsetY,
+                    contentHeight/2 + r - unitSize +offsetY,
                     mTextPaint);
         }
     }

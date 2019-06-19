@@ -1,5 +1,7 @@
 package com.xinming.mes.mesapp.entity;
 
+import java.util.Locale;
+
 public class RespiratorConfigData {
     double ipap = 0;//ipap测量值
     double epap = 0;//epap测量值
@@ -10,7 +12,7 @@ public class RespiratorConfigData {
     int temperature = 0;//温度
     int flow = 0;//流量
     String unit = "cmH2o";//单位
-    String language = "中文";//语言
+    Locale language = Locale.SIMPLIFIED_CHINESE;//语言
     String mode = null;//模式
     String dateTime ="";
 
@@ -86,11 +88,11 @@ public class RespiratorConfigData {
         this.unit = unit;
     }
 
-    public String getLanguage() {
+    public Locale getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(Locale language) {
         this.language = language;
     }
 

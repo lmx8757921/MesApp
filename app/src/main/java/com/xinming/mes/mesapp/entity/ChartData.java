@@ -8,7 +8,9 @@ import java.util.Date;
 
 public class ChartData {
 
-    private int data = 0;
+    private String mode = null;
+
+    private double data = 0;
 
     private float startX = 0;
 
@@ -16,15 +18,23 @@ public class ChartData {
 
     private Date time = null;
 
-    private  String color = null;
+    private  int color = 0;
 
     private float stepX = 0;//x轴跨度，非常重要，数据越界时要往回退
 
-    public int getData() {
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public double getData() {
         return data;
     }
 
-    public void setData(int data) {
+    public void setData(double data) {
         this.data = data;
     }
 
@@ -52,11 +62,11 @@ public class ChartData {
         this.time = time;
     }
 
-    public String getColor() {
+    public int getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(int color) {
         this.color = color;
     }
 

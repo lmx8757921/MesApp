@@ -29,4 +29,10 @@
         <attr name="type" />
         <attr name="count4x" />
     </declare-styleable>
+
+    <declare-styleable name="MesFPChartSpecialView">
+        <attr name="unit"/>
+        <attr name="type" />
+        <attr name="count4x" />
+    </declare-styleable>
 </resources>

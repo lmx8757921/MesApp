@@ -1,12 +1,13 @@
 package com.xinming.mes.mesapp.mod;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
-import android.view.View;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 import com.xinming.mes.mesapp.R;
+import com.xinming.mes.mesapp.entity.ChartData;
 import com.xinming.mes.mesapp.entity.RespiratorConfigDataVO;
 import com.xinming.mes.mesapp.entity.RespiratorDataVO;
 
@@ -16,8 +17,8 @@ import com.xinming.mes.mesapp.entity.RespiratorDataVO;
 
 public class HLModHandler extends BaseModHandler {
 
-    public HLModHandler(Context ctx, View v1, Handler mHandler){
-        super(ctx,v1,mHandler);
+    public HLModHandler(Context ctx, Handler mHandler){
+        super(ctx,mHandler);
     }
 
     @Override
@@ -26,6 +27,7 @@ public class HLModHandler extends BaseModHandler {
             @Override
             public void run() {
                 Logger.d("更新单包数据 start");
+                Activity v = (Activity) ctx;
                 //SPO2
                 TextView txSpO2 = v.findViewById(R.id.t1);
                 txSpO2.setText(data.getSpo2());
@@ -66,6 +68,11 @@ public class HLModHandler extends BaseModHandler {
             @Override
             public void run() {
                 Logger.d("更新配置数据 start");
+                Activity v = (Activity) ctx;
+                //氧浓度
+                TextView txFiO2 = v.findViewById(R.id.t21);
+                txFiO2.setText(data.getFio2());
+
                 TextView txFlow = v.findViewById(R.id.t31);
                 //流量
                 txFlow.setText(data.getFlow());
@@ -79,37 +86,15 @@ public class HLModHandler extends BaseModHandler {
         });
     }
 
+    @Override
+    public void updateViewWithChartData(final ChartData[] datas) {
+        //DO NOTHING
+    }
 
-    protected void init(){
-        mHandler.post(new Runnable() {
-            @Override
+    protected  void  setContentView(){
+        ((Activity)ctx).runOnUiThread(new Runnable() {
             public void run() {
-                TextView txSpO2 = v.findViewById(R.id.t1);
-                txSpO2.setText("");
-
-                TextView txTime = v.findViewById(R.id.workingtime);
-                //工作时间
-                txTime.setText("");
-
-                //报警
-                TextView txAlarm = v.findViewById(R.id.alarm);
-                txAlarm.setText("");
-
-                //状态
-                TextView txStatus = v.findViewById(R.id.status);
-                txStatus.setText("");
-
-                TextView txFlow = v.findViewById(R.id.t3);
-                //流量
-                txFlow.setText("");
-
-                TextView txFio2 = v.findViewById(R.id.t2);
-                //氧浓度
-                txFio2.setText("");
-
-                TextView txTempture = v.findViewById(R.id.t4);
-                //温度
-                txTempture.setText("");
+                ((Activity) ctx).setContentView(R.layout.mes_mod2_main_land);
             }
         });
     }

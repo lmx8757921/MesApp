@@ -91,7 +91,7 @@ public class MesDataServer {
             }
             catch (Exception e){
                 Logger.e("未预期错误："+e.getMessage());
-                MesApp.showAlert(ctx,"未预期错误：","，请联系管理员!");
+                MesApp.showAlert(ctx,"未预期错误：","请联系管理员!");
             } finally{
                 close(in);
             }

@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.orhanobut.logger.Logger;
 import com.xinming.mes.mesapp.R;
 import com.xinming.mes.mesapp.entity.ChartData;
 
@@ -22,9 +23,10 @@ import java.util.Deque;
 import java.util.List;
 
 /**
- * 绘制MES曲线图的view
+ * Created by Administrator on 2019/6/18.
  */
-public class MesFPChartView extends View {
+
+public class MesFPChartSpecialView extends View {
     private String unit; //单位 cmh2o,kap,hpa
     private String type; //类型 P,F
     private int max;//坐标最大值
@@ -37,8 +39,6 @@ public class MesFPChartView extends View {
     private float x0 = 0;//零点X坐标
     private float xEnd = 0;//终点X坐标
     private float y0 = 0;//零点Y坐标
-    private boolean refreshText= false;//是否刷新最大最小值
-    private boolean isXOutOfBound = false;//X轴点数是否溢出标志
 
     //直线坐标画笔
     private Paint mLinePaint = new Paint();
@@ -57,24 +57,27 @@ public class MesFPChartView extends View {
     private int[] currentTemplete = null;
     //默认的模板
     private int[] defaultTemplete = null;
-    //图表数据集合
-    private List<ChartData> datas = new ArrayList<>();
+    //存放前十秒图表数据集合
+    private List<ChartData> last10Datas = new ArrayList<>();
+    //存放现在前十秒图表数据集合
+    private List<ChartData> current10Datas = new ArrayList<>();
+
     //最后一次画点数据数据
-    private ChartData lastData = null;
+    //private ChartData lastData = null;
     //最大最小值点的坐标0:max x,1:max y,2:min x,3:min y,
     private float[] xys = new float[4];
 
-    public MesFPChartView(Context context) {
+    public MesFPChartSpecialView(Context context) {
         super(context);
         init(null, 0);
     }
 
-    public MesFPChartView(Context context, AttributeSet attrs) {
+    public MesFPChartSpecialView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs, 0);
     }
 
-    public MesFPChartView(Context context, AttributeSet attrs, int defStyle) {
+    public MesFPChartSpecialView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
     }
@@ -83,18 +86,25 @@ public class MesFPChartView extends View {
      * 添加数据
      */
     public void addData(ChartData data){
-        calcStepX(data);
-        datas.add(data);
+        ChartData lastData = null;
+        if(current10Datas.size() != 0){
+            lastData = current10Datas.get(current10Datas.size() -1);
+        }
+        //首先计算步长
+        calcStepX(data,lastData);
+        //整理数据
+        reOrganizeDatas(data);
+        //判断数据范围，越界使用新模板，否则使用老模板
+        judgeDatasScope(last10Datas);
+        judgeDatasScope(current10Datas);
     }
 
     /**
      * 重置数据
      */
     public void resetData(){
-        datas.clear();
-        lastData = null;
-        refreshText= false;//是否刷新最大最小值
-        isXOutOfBound = false;//X轴点数是否溢出标志
+        last10Datas.clear();
+        current10Datas.clear();
     }
 
     private void init(AttributeSet attrs, int defStyle)  {
@@ -174,8 +184,6 @@ public class MesFPChartView extends View {
         contentHeight = getHeight() - paddingTop - paddingBottom;
         cXLength = (float)(contentWidth * 0.9 - mTextPaint.getTextSize()*2);
         cYLength = contentHeight - mTextPaint.getTextSize()*2 ;
-        //判断数据范围，越界使用新模板，否则使用老模板
-        judgeDatasScope();
         //画坐标
         drawCoordinate(canvas);
         //处理曲线，画图
@@ -281,33 +289,33 @@ public class MesFPChartView extends View {
      * 计算两点之间的宽度
      * @param data
      */
-    private void calcStepX(ChartData data){
-        if(datas.size() > 0){
-            lastData = datas.get(datas.size()-1);
+    private void calcStepX(ChartData data,ChartData lastData){
+
+        if(lastData != null){
             Date currentTime = data.getTime();
             Date lastTime = lastData.getTime();
             //两个时间相隔的秒数
             float diffSecond = ((float)(currentTime.getTime() -lastTime.getTime()))/1000;
             data.setStepX(diffSecond/count4x*cXLength);
         }else{
-            data.setStepX(cXLength/count4x);
+            data.setStepX(0);//第一个点没有宽度
         }
     }
 
     /**
      * 计算真实坐标点
      */
-    private void calcRealCoordinate(ChartData data,boolean isFoward){
+    private void calcRealCoordinate(ChartData data,ChartData lastData,boolean isFoward){
         float x = 0;
         float y = 0;
         double d = data.getData();
-        y = (float)(y0 - d * cYLength/(max -min) );
+        y = calcRealY(d);
         data.setStartY(y);
         if(lastData != null){
             if(isFoward){//正向计算
-                x = lastData.getStartX() + data.getStepX();
+                x = lastData.getStartX() + data.getStepX();//使用前一点数据的步长
             }else{
-                x = lastData.getStartX() - lastData.getStepX();
+                x = lastData.getStartX() - lastData.getStepX();//使用后一点数据的步长
             }
             data.setStartX(x);
         }else{
@@ -320,66 +328,91 @@ public class MesFPChartView extends View {
     }
 
     /**
+     * 计算真实的Y坐标
+     * @param d
+     * @return
+     */
+    private float calcRealY(double d){
+        return (float)(y0 - d * cYLength/(max -min) );
+    }
+
+    /**
      * 处理曲线图
      */
     private void exccuteChart(Canvas canvas){
-        if(datas.size() > 0){
-            //整理要输出的曲线点
-            Deque<ChartData> stack = reOrganizeDatas();
-            //画图
-            drawChart(canvas,stack);
-        }
+        //画图
+        drawChart(canvas);
     }
 
     /**
      * 画图
      * @param canvas
      */
-    private void drawChart(Canvas canvas,Deque<ChartData> stack){
-        if(isXOutOfBound){
-            drawChartReverse(canvas,stack);
+    private void drawChart(Canvas canvas){
+        if(last10Datas.size() > 0){
+            drawChartReverse(canvas);
         }else{
-            drawChartFoward(canvas,stack);
+            drawChartFoward(canvas);
         }
     }
     /**
      * 正向画曲线
      * @param canvas
      */
-    private void drawChartFoward(Canvas canvas,Deque<ChartData> stack){
-        lastData = null;
-        ChartData d = stack.pollFirst();
-        while(d != null){
+    private void drawChartFoward(Canvas canvas){
+        ChartData lastData = null;
+        ChartData d = null;
+        Logger.d("drawChartFoward current10Datas.size="+current10Datas.size());
+        for(int i =0; i< current10Datas.size();i++){
+            d = current10Datas.get(i);
             mCurvePaint.setColor(d.getColor());
             //计算真实坐标
-            calcRealCoordinate(d,true);
+            calcRealCoordinate(d,lastData,true);
             if(lastData != null){
                 canvas.drawLine(lastData.getStartX(),lastData.getStartY(),d.getStartX(),d.getStartY(),mCurvePaint);
             }
             lastData = d;
-            d = stack.pollFirst();
+
         }
     }
     /**
      * 反向画曲线
      * @param canvas
      */
-    private void drawChartReverse(Canvas canvas,Deque<ChartData> stack) {
+    private void drawChartReverse(Canvas canvas) {
+        Logger.d("drawChartReverse current10Datas.size="+current10Datas.size());
+        Logger.d("drawChartReverse last10Datas.size="+last10Datas.size());
+        ChartData lastData = null;
+        for(int i =current10Datas.size()-1; i>=0 ;i--){
+            ChartData d = current10Datas.get(i);
+            if (lastData != null) {
+                //计算真实坐标
+                calcRealCoordinate(d,lastData,false);
+                mCurvePaint.setColor(lastData.getColor());//反向的使用上一次的点的颜色
+                canvas.drawLine(lastData.getStartX(), lastData.getStartY(), d.getStartX(), d.getStartY(), mCurvePaint);
+            }
+            lastData = d;
+        }
+        if(lastData != null){
+            //最后画X0点与最后一个点的线，直线
+            mCurvePaint.setColor(lastData.getColor());
+            if(lastData.getStartX() != x0){
+                canvas.drawLine(lastData.getStartX(), lastData.getStartY(), x0, lastData.getStartY(), mCurvePaint);
+            }
+        }
+
+        //画上十秒剩余可用点的线
         lastData = null;
-        ChartData d = stack.pollLast();
-        while (d != null) {
+        for(int i =last10Datas.size()-1; i>=0 ;i--){
+            ChartData d = last10Datas.get(i);
             //计算真实坐标
-            calcRealCoordinate(d,false);
             if (lastData != null) {
                 mCurvePaint.setColor(lastData.getColor());//反向的使用上一次的点的颜色
                 canvas.drawLine(lastData.getStartX(), lastData.getStartY(), d.getStartX(), d.getStartY(), mCurvePaint);
             }
             lastData = d;
-            d = stack.pollLast();
         }
-        //最后画X0点与最后一个点的线，直线
-        mCurvePaint.setColor(lastData.getColor());
-        canvas.drawLine(lastData.getStartX(), lastData.getStartY(), x0, lastData.getStartY(), mCurvePaint);
+
     }
 
 
@@ -387,7 +420,7 @@ public class MesFPChartView extends View {
     /**
      * 判断数据范围，越界使用新模板，否则使用老模板
      */
-    private void judgeDatasScope(){
+    private void judgeDatasScope(List<ChartData> datas){
         for(ChartData d : datas){
             double v = d.getData();
             //当前模板不是默认模板，判断是否可以恢复默认模板
@@ -406,7 +439,6 @@ public class MesFPChartView extends View {
                     //越界了使用新模板
                     int[] t = getTemplete(1);
                     resetTemplete(t);
-                    refreshText = true;
                     return;
                 }
             }
@@ -414,36 +446,71 @@ public class MesFPChartView extends View {
 
         //判断后默认模板满足要求，重置
         resetTemplete(defaultTemplete);
-        refreshText = true;
 
     }
 
     /**
      * 整理数据
      */
-    private Deque<ChartData> reOrganizeDatas(){
-        float step = 0;
-        Deque<ChartData> stack = new ArrayDeque<>();
-        int i =  datas.size()-1;
-        int count = datas.size();
-        for(;i>=0;i--){
-            ChartData d = datas.get(i);
+    private void reOrganizeDatas(ChartData currentData){
+        float step = currentData.getStepX();
+        boolean needDelete = false;
+        for(ChartData d: current10Datas){
             step += d.getStepX();
             if(step > cXLength){
-                //如果点数超了，从最后一个点开始画
-                isXOutOfBound = true;
+                //如果点数超了，把当前所有点移到上一个十秒点的集合
+                last10Datas.clear();
+                last10Datas.addAll(current10Datas);
+                current10Datas.clear();
+                currentData.setStepX(0);//步长清零，第一个点
                 break;
+            }
+        }
+
+        current10Datas.add(currentData);
+        //累加步长，多余的点从上一十秒数据中删除
+        float x = x0;
+        for(ChartData d: current10Datas){
+            x += d.getStepX();
+        }
+        Deque<ChartData> tempDatas = new ArrayDeque<>();
+        if(last10Datas.size() > 1){
+            int i = last10Datas.size()-1;
+            ChartData d = last10Datas.get(i);
+            float x1 = d.getStartX();
+            tempDatas.push(d);
+            for(i = i -1; i>=0 ;i--){
+                x1 -= d.getStepX();
+                if(x1 < x){
+                    //清除多余的元素
+                    Logger.d("current10Datas="+current10Datas.size());
+                    Logger.d("last10Datas="+last10Datas.size());
+                    Logger.d("X="+x);
+                    Logger.d("X1="+x1);
+                    Logger.d("getStepX="+d.getStepX());
+                    Logger.d("i="+i);
+                    needDelete = true;
+                    break;
+                }
+                d = last10Datas.get(i);
+                tempDatas.push(d);
+            }
+
+            if(needDelete){
+                last10Datas.clear();
+                last10Datas.addAll(tempDatas);
+            }
+
+            if(last10Datas.size() > 1){
+                currentData.setStartX(last10Datas.get(0).getStartX());
+                currentData.setStartY(calcRealY(currentData.getData()));
             }else{
-                stack.push(d);
+                //小于2个点清空
+                last10Datas.clear();
             }
+        }else{
+            last10Datas.clear();
         }
-        //清除多余的元素
-        if(i > 0){
-            for(int j =0;j< i; j++){
-                datas.remove(0);
-            }
-        }
-        return stack;
 
     }
 

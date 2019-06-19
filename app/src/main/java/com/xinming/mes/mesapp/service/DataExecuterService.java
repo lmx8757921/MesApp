@@ -1,6 +1,9 @@
 package com.xinming.mes.mesapp.service;
 
+import android.graphics.Color;
+
 import com.orhanobut.logger.Logger;
+import com.xinming.mes.mesapp.entity.ChartData;
 import com.xinming.mes.mesapp.entity.RespiratorConfigData;
 import com.xinming.mes.mesapp.entity.RespiratorConfigDataVO;
 import com.xinming.mes.mesapp.entity.RespiratorData;
@@ -11,6 +14,8 @@ import com.xinming.mes.mesapp.mod.IModHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 public class DataExecuterService {
@@ -36,51 +41,39 @@ public class DataExecuterService {
         }
         while(true){
             //            6	同步字
-            int isEnd = in.read();
-            if(isEnd == -1){
+            int cmd = in.read();
+            if(cmd == -1){
                 break;
             }
-            in.read(new byte[5]);
-//            2	信息字数
-            in.read(new byte[2]);
-//            1	目标地址
-            in.read(new byte[1]);
-//            1	源地址
-            in.read(new byte[1]);
-//            2	命令码
-            byte[] cmds = new byte[2];
-            in.read(cmds);
-            boolean isConfig = isConfig(cmds);
-//            2	命令码参数
-            in.read(new byte[2]);
-//            9	呼吸机序列号
+
+            // 9	呼吸机序列号
             in.read(new byte[9]);
-            //配置数据下多读以下几个数据
-            if(isConfig){
+            //发送配置
+            if(cmd == 0x01){
                 //获取呼吸机数据
                 RespiratorConfigDataVO cfgVo = new RespiratorConfigDataVO();
                 //            1	呼吸机型号
                 in.read(new byte[1]);
                 //            11	呼吸机软件版本
                 in.read(new byte[11]);
-                //            7	当前时间
-                byte[] bDatestimes = new byte[7];
-                in.read(bDatestimes);
-                String date = getDate(bDatestimes[0],bDatestimes[1],bDatestimes[2],bDatestimes[3]);
-                configData.setDateTime(date);
-                cfgVo.setDateTime(date);
+
                 //            6	累计运行时间
                 in.read(new byte[6]);
                 setRespiratorDataConfig(in,cfgVo);
                 //更新显示配置数据
                 getModHandler(configData.getMode()).updateViewWithConfigData(cfgVo);
-            }else{
+            }else if(cmd == 0x02){//发送整包数据
                 RespiratorData data = new RespiratorData();
-                RespiratorConfigDataVO cfgVo = new RespiratorConfigDataVO();
                 RespiratorDataVO vo = new RespiratorDataVO();
+                RespiratorConfigDataVO cfgVo = new RespiratorConfigDataVO();
                 setRespiratorDataPackage(in,data,vo,cfgVo);
                 //更新显示数据
-                getModHandler(configData.getMode()).updateViewWithPackageData(vo,cfgVo);
+                getModHandler(vo.getMode()).updateViewWithPackageData(vo,cfgVo);
+            }else if((cmd == 0x03)){//发送实时波形数据
+                //更新显示波形图数据
+                ChartData[] datas = new ChartData[2];
+                setRespiratorDataChart(in ,datas);
+                getModHandler(datas[0].getMode()).updateViewWithChartData(datas);
             }
 
             //读到流的结尾
@@ -101,10 +94,11 @@ public class DataExecuterService {
         //  1	当前模式
         int mode = in.read();
         configData = new RespiratorConfigData();
+
         String modeName = getMode(mode);
-        Logger.d("modeName="+modeName);
         configData.setMode(modeName);
         vo.setMode(modeName);
+
         byte[] bIpaps = null;
         byte[] bEpaps = null;
         byte[] bCpaps = null;
@@ -121,6 +115,8 @@ public class DataExecuterService {
             int fio2 = in.read();
             configData.setFio2(fio2);
             vo.setFio2(getFiO2(fio2));
+            //补字节
+            in.read(new byte[13]);
         }else if("S/T".equals(modeName)){
 //            IPAP(2)
             bIpaps = new byte[2];
@@ -148,6 +144,8 @@ public class DataExecuterService {
             vo.setFio2(getFiO2(fio2));
 //            温度(1)
             in.read(new byte[1]);
+            //补字节
+            in.read(new byte[4]);
 
         }else if("T".equals(modeName)){
 //            IPAP(2)
@@ -171,9 +169,11 @@ public class DataExecuterService {
 //            氧浓度(1)
             int fio2 = in.read();
             configData.setFio2(fio2);
-            vo.setFio2(String.valueOf(fio2));
+            vo.setFio2(getFiO2(fio2));
 //            温度(1)
             in.read(new byte[1]);
+            //补字节
+            in.read(new byte[5]);
 
         }else if("S".equals(modeName)){
 //           IPAP(2)
@@ -193,9 +193,11 @@ public class DataExecuterService {
 //            氧浓度(1)
             int fio2 = in.read();
             configData.setFio2(fio2);
-            vo.setFio2(String.valueOf(fio2));
+            vo.setFio2(getFiO2(fio2));
 //            温度(1)
             in.read(new byte[1]);
+            //补字节
+            in.read(new byte[6]);
         }else if("CPAP".equals(modeName)){
 //            CPAP(2)
             bCpaps = new byte[2];
@@ -207,9 +209,11 @@ public class DataExecuterService {
 //            氧浓度(1)
             int fio2 = in.read();
             configData.setFio2(fio2);
-            vo.setFio2(String.valueOf(fio2));
+            vo.setFio2(getFiO2(fio2));
 //            温度(1)
             in.read(new byte[1]);
+            //补字节
+            in.read(new byte[10]);
 
         }else if("APAP".equals(modeName)){
 //            CPAP Start(2)
@@ -225,9 +229,11 @@ public class DataExecuterService {
 //            氧浓度(1)
             int fio2 = in.read();
             configData.setFio2(fio2);
-            vo.setFio2(String.valueOf(fio2));
+            vo.setFio2(getFiO2(fio2));
 //            温度(1)
             in.read(new byte[1]);
+            //补字节
+            in.read(new byte[6]);
         }else if("PC".equals(modeName)){
 //           IPAP(2)
             bIpaps = new byte[2];
@@ -250,9 +256,11 @@ public class DataExecuterService {
 //            氧浓度(1)
             int fio2 = in.read();
             configData.setFio2(fio2);
-            vo.setFio2(String.valueOf(fio2));
+            vo.setFio2(getFiO2(fio2));
 //            温度(1)
             in.read(new byte[1]);
+            //补字节
+            in.read(new byte[5]);
 
         }else if("AutoS".equals(modeName)){
 //            IPAP Max (2)
@@ -274,13 +282,19 @@ public class DataExecuterService {
 //            氧浓度(1)
             int fio2 = in.read();
             configData.setFio2(fio2);
-            vo.setFio2(String.valueOf(fio2));
+            vo.setFio2(getFiO2(fio2));
 //            温度(1)
             in.read(new byte[1]);
+            //补字节
+            in.read(new byte[2]);
 
         }else if("MVAPS".equals(modeName)){
 //            Vt (2)
-            in.read(new byte[2]);
+            byte[] bVts = new byte[2];
+            in.read(bVts);
+            int vt = getInt(bVts);
+            configData.setMl(vt);
+            vo.setMl(String.valueOf(vt));
 //            IPAP Max (2)
             in.read(new byte[2]);
 //            IPAP Min (2)
@@ -305,7 +319,7 @@ public class DataExecuterService {
 //            氧浓度(1)
             int fio2 = in.read();
             configData.setFio2(fio2);
-            vo.setFio2(String.valueOf(fio2));
+            vo.setFio2(getFiO2(fio2));
 //            温度(1)
             in.read(new byte[1]);
         }
@@ -424,31 +438,32 @@ public class DataExecuterService {
      */
     private  void setRespiratorDataPackage(InputStream in,RespiratorData data,RespiratorDataVO vo,RespiratorConfigDataVO cfgVo) throws IOException ,MesDataException{
 
-        String modeName = configData.getMode();
-        data.setMode(modeName);
+        int m = in.read();
+        data.setMode(m);
+        String modeName = getMode(m);
         vo.setMode(modeName);
+        cfgVo.setMode(modeName);
         if("HFlow".equals(modeName) || "LFlow".equals(modeName)){
-//                0--2	时、分、秒
-            byte[] timeBts = new byte[3];
-            in.read(timeBts);
-            data.setTime(getRespTime(timeBts));
-            vo.setTime(data.getTime());
-//                3--4	流量(-200 - +200) L/min
+            //  1温度
+            int temperature = in.read();
+            data.setTemperature(temperature);
+            vo.setTemperature(String.valueOf(temperature));
+
+//                2--3	流量(-200 - +200) L/min
             byte[] flowBytes = new byte[2] ;
             in.read(flowBytes);
             data.setFlow(getSignedInt(flowBytes));
             vo.setFlow(data.getFlow());
-//                5	温度
-            int temperature = in.read();
-            data.setTemperature(temperature);
-            vo.setTemperature(getTemperature(temperature));
-//                6	氧气浓度0-100
+
+//                4	氧气浓度0-100
             int fio2 = in.read();
             data.setFio2(fio2);
             vo.setFio2(String.valueOf(fio2));
-//                7	血氧0-100
-            in.read(new byte[1]);
-//                8	脉率0-255
+//                5血氧0-100
+            int spo2 = in.read();
+            data.setSpo2(spo2);
+            vo.setSpo2(String.valueOf(spo2));
+//                6	脉率0-255
             in.read(new byte[1]);
 //            当前工作时间 分钟
             int t0 = in.read();
@@ -461,130 +476,103 @@ public class DataExecuterService {
             //读9个无用字节
             in.read(new byte[9]);
 
-        }else if("CPAP".equals(modeName) || "APAP".equals(modeName)){
-//                0--2	时、分、秒
-            byte[] timeBts = new byte[3];
-            in.read(timeBts);
-            data.setTime(getRespTime(timeBts));
-            vo.setTime(data.getTime());
-//                3--4	目标压力
-            byte[] bDps = new byte[2];
-            in.read(bDps);
-            if("APAP".equals(modeName)){
-                double dps =  getValueWithUnit(getInt(bDps),configData.getUnit());
-                configData.setCpap(dps);
-                cfgVo.setCpap(String.valueOf(dps));
-            }
-//                5--6	当前压力
+        }else{
+            //                1--2	当前压力
             byte[] bCps = new byte[2];
             in.read(bCps);
             double cps =  getValueWithUnit(getInt(bCps),configData.getUnit());
             data.setCpap(cps);
             vo.setCpap(String.valueOf(cps));
-//                7--8	当前流量
+
+            //                3--4	当前流量
             byte[] flowBytes = new byte[2] ;
             in.read(flowBytes);
             data.setFlow(getSignedInt(flowBytes));
             vo.setFlow(data.getFlow());
-//                9	呼吸事件0，无；1低通气，2，呼吸暂停 4，鼾声5.中枢
-            int event = in.read();
-            setEvent(data,vo,event);
-//                10-11	潮气量(0-2500)mL
-            in.read(new byte[2]);
-//                12	漏气量(0-99) L/min
-            in.read(new byte[1]);
-//                13	分钟通气量(0-30)L/min
-            in.read(new byte[1]);
-//                14	血氧0-100
+
+            //                5	氧气浓度0-100
+            int fio2 = in.read();
+            data.setFio2(fio2);
+            vo.setFio2(String.valueOf(fio2));
+
+            //                6	血氧0-100
             int spo2 =  in.read();
             data.setSpo2(spo2);
             vo.setSpo2(String.valueOf(spo2));
-//                15	脉率0-255
+
+            //                7	脉率0-255
             in.read(new byte[1]);
-//                16	氧气浓度0-100
-            int fio2 = in.read();
-            data.setFio2(fio2);
-            vo.setFio2(String.valueOf(fio2));
-//                17	CPAP(40-400)4-40cmH2O测量值
-            int iCpap = in.read();
-            double cpap =  getValueWithUnit(iCpap,configData.getUnit());
-            data.setCpap(cpap);
-            vo.setCpap(String.valueOf(cpap));
 
-            //读3个无用字节
-            in.read(new byte[3]);
-
-        }else{
-//                0--2	时、分、秒
-            byte[] timeBts = new byte[3];
-            in.read(timeBts);
-            data.setTime(getRespTime(timeBts));
-            vo.setTime(data.getTime());
-//                3--4	压力(0-350)0-35cmH2O
-            byte[] bPs = new byte[2];
-            in.read(bPs);
-            double cp =  getValueWithUnit(getInt(bPs),configData.getUnit());
-            data.setCpap(cp);
-            vo.setCpap(String.valueOf(cp));
-
-//                5--6	流量(-200 - +200) L/min
-            byte[] flowBytes = new byte[2] ;
-            in.read(flowBytes);
-            data.setFlow(getSignedInt(flowBytes));
-            vo.setFlow(data.getFlow());
-//                7--8	潮气量(0-2500)mL
-            byte[] bmls = new byte[2];
-            in.read(bmls);
-            data.setMl(getInt(bmls));
-            vo.setMl(String.valueOf(data.getMl()));
-//                9	漏气量(0-99) L/min
+            //                8-9	潮气量(0-2500)mL
+            byte[] bMls = new byte[2];
+            in.read(bMls);
+            int ml = getInt(bMls);
+            data.setMl(ml);
+            vo.setMl(String.valueOf(ml));
+            //                10	漏气量(0-99) L/min
             int leak = in.read();
             data.setLeak(leak);
             vo.setLeak(String.valueOf(leak));
-//                10	分钟通气量(0-30)L/min
+//                11	分钟通气量(0-30)L/min
             int mv = in.read();
-            double dMv =  getValueWithUnit(mv,configData.getUnit());
-            data.setMv(dMv);
-            vo.setMv(String.valueOf(dMv));
-//                11	呼吸频率(0-60)min
-            int bmp = in.read();
-            data.setBmp(bmp);
-            vo.setBmp(String.valueOf(bmp));
-//                12	吸呼比(1-99),1:0.1-9.9
-            int ie = in.read();
-            data.setIe(((double)ie)/10);
-            vo.setIe("1:"+(data.getIe()));
-//                13	IPAP(40-250)4-25cmH2O 目标值
-            in.read(new byte[1]);
-//                14	EPAP(40-200)4-20cmH2O目标值
-            in.read(new byte[1]);
-//                15	呼吸事件对128求余后： 0，无；1低通气，2，呼吸暂停 4，鼾声5.中枢
-////                主动/被动 ：主动>=128,被动<128;
-            in.read(new byte[1]);
-//                16	血氧0-100  0，无；1低通气，2，呼吸暂停 4，鼾声5.中枢
-//                主动/被动 ：主动>=128,被动<128;
-            int spo2 = in.read();
-            data.setSpo2(spo2);
-            vo.setSpo2(String.valueOf(spo2));
-//                17	脉率0-255
-            in.read(new byte[1]);
-//                18	氧气浓度0-100
-            int fio2 = in.read();
-            data.setFio2(fio2);
-            vo.setFio2(String.valueOf(fio2));
-//                19--20	IPAP(40-400)4-40cmH2O测量值
-            byte[] bIpaps = new byte[2];
-            in.read(bIpaps);
-            double ipap =  getValueWithUnit(getInt(bIpaps),configData.getUnit());
-            data.setIpap(ipap);
-            vo.setIpap(String.valueOf(ipap));
-//            EPAP(2)
-//                21	EPAP(40-200)4-20cmH2O
-            int e = in.read();
-            double epap =  getValueWithUnit(e,configData.getUnit());
-            data.setEpap(epap);
-            vo.setEpap(String.valueOf(epap));
+            data.setMv(((double)mv)/10);
+            vo.setMv(String.valueOf(data.getMv()));
+//                12	呼吸事件0，无；1低通气，2，呼吸暂停 4，鼾声5.中枢
+            int event = in.read();
+            setEvent(data,vo,event);
 
+            if("CPAP".equals(modeName) || "APAP".equals(modeName)){
+
+//                13-14	CPAP(40-400)4-40cmH2O测量值
+
+                byte[] bCpaps = new byte[2];
+                in.read(bCpaps);
+                double cpap =  getValueWithUnit(getInt(bCpaps),configData.getUnit());
+                data.setCpap(cpap);
+                vo.setCpap(String.valueOf(cpap));
+
+//                15	目标压力
+                int destP = in.read();
+                if("APAP".equals(modeName)){
+                    double dps =  getValueWithUnit(destP,configData.getUnit());
+                    configData.setCpap(dps);
+                    cfgVo.setCpap(String.valueOf(dps));
+                }
+
+                //读3个无用字节
+                in.read(new byte[4]);
+
+            }else{
+
+//                13	吸呼比(1-99),1:0.1-9.9
+                int ie = in.read();
+                data.setIe(((double)ie)/10);
+                vo.setIe("1:"+(data.getIe()));
+
+//                14	呼吸频率(0-60)min
+                int bmp = in.read();
+                data.setBmp(bmp);
+                vo.setBmp(String.valueOf(bmp));
+
+//                15	IPAP(40-250)4-25cmH2O 目标值
+                int ipapCfg = in.read();
+                cfgVo.setIpap(String.valueOf(getValueWithUnit(ipapCfg,configData.getUnit())));
+//                16	EPAP(40-200)4-20cmH2O目标值
+                int epapCfg = in.read();
+                cfgVo.setEpap(String.valueOf(getValueWithUnit(epapCfg,configData.getUnit())));
+
+//                17--18	IPAP(40-400)4-40cmH2O测量值
+                byte[] bIpaps = new byte[2];
+                in.read(bIpaps);
+                double ipap =  getValueWithUnit(getInt(bIpaps),configData.getUnit());
+                data.setIpap(ipap);
+                vo.setIpap(String.valueOf(ipap));
+//              19 EPAP 测量值 EPAP(40-200)4-20cmH2O
+                int e = in.read();
+                double epap =  getValueWithUnit(e,configData.getUnit());
+                data.setEpap(epap);
+                vo.setEpap(String.valueOf(epap));
+            }
         }
 
         //机器状态
@@ -595,6 +583,52 @@ public class DataExecuterService {
         int alarm = in.read();
         data.setAlarm(alarm);
         vo.setAlarm(getAlarm(alarm));
+    }
+
+
+    /**
+     * 设置曲线图数据
+     * @param in
+     * @param datas
+     */
+    private void setRespiratorDataChart(InputStream in ,ChartData[] datas) throws IOException, MesDataException {
+
+        int m = in.read();
+        String modeName = getMode(m);
+
+        //                1--2	当前压力
+        byte[] bCps = new byte[2];
+        in.read(bCps);
+        double cps =  getValueWithUnit(getInt(bCps),configData.getUnit());
+
+        //                3--4	当前流量
+        byte[] flowBytes = new byte[2] ;
+        in.read(flowBytes);
+        int flow = getSignedInt(flowBytes);
+
+        //   5	呼吸事件0，无；1低通气，2，呼吸暂停 4，鼾声5.中枢
+        int event = in.read();
+        int color = getEventHighColor(event);
+
+        //当前数据获取时间
+        Date currentTime = new Date();
+
+        //流量图表设置
+        ChartData fData = new ChartData();
+        fData.setMode(modeName);
+        fData.setTime(currentTime);
+        fData.setData(flow);
+        fData.setColor(color);
+
+        //压力图表设置
+        ChartData pData = new ChartData();
+        pData.setMode(modeName);
+        pData.setTime(currentTime);
+        pData.setData(cps);
+        pData.setColor(color);
+
+        datas[0] = fData;
+        datas[1] = pData;
     }
 
 
@@ -644,10 +678,15 @@ public class DataExecuterService {
         data.setEvent(event);
         vo.setEventLow(getEventLow (low6));
         vo.setEventHigh(getEventHigh(event));
-        vo.setEventHighColor(getEventHighColor(event));
+        //vo.setEventHighColor(getEventHighColor(event));
 
     }
 
+    /**
+     * 获取工作时长
+     * @param t
+     * @return
+     */
     private String getWorkTime(int t){
         StringBuilder sb = new StringBuilder();
         int tMod = t % 60;
@@ -660,7 +699,7 @@ public class DataExecuterService {
             }
             sb.append(hMod).append("小时");
         }
-        sb.append(tMod).append("分");
+        sb.append(tMod).append("分钟");
 
         return sb.toString();
     }
@@ -698,20 +737,20 @@ public class DataExecuterService {
         return eh;
     }
 
-    private String getEventHighColor(int h) throws MesDataException{
-        String eh = "";
+    private int getEventHighColor(int h) throws MesDataException{
+        int color = 0;
         //绿色/红色/白色：11B/ 01B //00B:
         int h2 = h >>> 6;
         if(h2 == 3){
-            eh = "绿色";
+            color = Color.GREEN;
         }else if(h2 == 1){
-            eh = "红色";
+            color = Color.RED;
         }else if(h2 == 0){
-            eh = "白色";
+            color = Color.WHITE;
         }else{
             throw new MesDataException("getEventHighColor数据错误,请确认呼吸事件高2位"+h2+"的正确性!");
         }
-        return eh;
+        return color;
     }
 
     private String getStatus(int status) throws  MesDataException{
@@ -806,13 +845,14 @@ public class DataExecuterService {
      * @return
      */
     private String getMode(int m) throws MesDataException{
+
         switch(m){
-            case 0x00:return "S/T" ;
+            case 0x00:return "S/T";
             case 0x01:return "T" ;
             case 0x02:return "S" ;
             case 0x03:return "CPAP" ;
             case 0x04:return "APAP" ;
-            case 0x05:return "PCV" ;
+            case 0x05:return "PC" ;
             case 0x06:return "AutoS" ;
             case 0x07:return "MVAPS" ;
             case 0x08:return "HFlow" ;
@@ -889,13 +929,13 @@ public class DataExecuterService {
         }
     }
 
-    private String getLanguage(int l) throws MesDataException{
+    private Locale getLanguage(int l) throws MesDataException{
         if(l == 0x00){
-            return "中文";
+            return Locale.SIMPLIFIED_CHINESE;
         }else if(l == 0x01){
-            return "英文";
+            return Locale.ENGLISH;
         }else{
-            throw new RuntimeException("getLanguage语言数据错误,请确认语言数据"+l+"的正确性!");
+            throw new MesDataException("getLanguage语言数据错误,请确认语言数据"+l+"的正确性!");
         }
     }
 

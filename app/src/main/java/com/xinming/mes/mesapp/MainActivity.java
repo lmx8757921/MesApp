@@ -1,5 +1,6 @@
 package com.xinming.mes.mesapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
+import com.xinming.mes.mesapp.charts.MesFPChartSpecialView;
 import com.xinming.mes.mesapp.charts.MesFPChartView;
 import com.xinming.mes.mesapp.entity.ChartData;
 import com.xinming.mes.mesapp.exception.MesExceptionHandler;
@@ -29,35 +31,36 @@ public class MainActivity extends AppCompatActivity {
      */
     public void test1(View v){
         Logger.d("test1 start !");
-        MesFPChartView chart = (MesFPChartView)findViewById(R.id.chart1);
+        MesFPChartSpecialView chart = (MesFPChartSpecialView)findViewById(R.id.chart1);
         ChartData d = new ChartData();
         d.setData(20);
-        d.setColor("红色");
+        d.setColor(Color.RED);
         d.setTime(new Date());
         chart.addData(d);
+        chart.invalidate();
         sleep(300);
 
         d = new ChartData();
         d.setData(20);
-        d.setColor("白色");
+        d.setColor(Color.WHITE);
         d.setTime(new Date());
         chart.addData(d);
+        chart.invalidate();
         sleep(300);
 
         d = new ChartData();
         d.setData(100);
-        d.setColor("白色");
+        d.setColor(Color.WHITE);
         d.setTime(new Date());
         chart.addData(d);
+        chart.invalidate();
         sleep(200);
 
         d = new ChartData();
         d.setData(-20);
-        d.setColor("绿色");
+        d.setColor(Color.GREEN);
         d.setTime(new Date());
         chart.addData(d);
-        sleep(200);
-
         chart.invalidate();
 
         Logger.d("test1 end !");
@@ -69,28 +72,28 @@ public class MainActivity extends AppCompatActivity {
         MesFPChartView chart = (MesFPChartView)findViewById(R.id.chart2);
         ChartData d = new ChartData();
         d.setData(20);
-        d.setColor("红色");
+        d.setColor(Color.RED);
         d.setTime(new Date());
         chart.addData(d);
         sleep(300);
 
         d = new ChartData();
         d.setData(20);
-        d.setColor("白色");
+        d.setColor(Color.WHITE);
         d.setTime(new Date());
         chart.addData(d);
         sleep(300);
 
         d = new ChartData();
         d.setData(150);
-        d.setColor("白色");
+        d.setColor(Color.WHITE);
         d.setTime(new Date());
         chart.addData(d);
         sleep(200);
 
         d = new ChartData();
         d.setData(-20);
-        d.setColor("绿色");
+        d.setColor(Color.GREEN);
         d.setTime(new Date());
         chart.addData(d);
         sleep(200);

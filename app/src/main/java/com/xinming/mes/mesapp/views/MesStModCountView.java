@@ -79,9 +79,10 @@ public class MesStModCountView extends View {
         mTextPaint.setTextAlign(Paint.Align.LEFT);
         float leftX =  contentWidth/10;
         float leftY = contentHeight /16;
+        float offsetY = 30;
         canvas.drawText("I:E",
                 leftX,
-                leftY*2,
+                (float)(leftY*2.5),
                 mTextPaint);
 
         canvas.drawText("MV",
@@ -91,7 +92,7 @@ public class MesStModCountView extends View {
 
         canvas.drawText("L/min",
                 leftX,
-                leftY*7,
+                leftY*7+offsetY,
                 mTextPaint);
 
         canvas.drawText("Leak",
@@ -101,7 +102,7 @@ public class MesStModCountView extends View {
 
         canvas.drawText("L/min",
                 leftX,
-                leftY*11,
+                leftY*11+offsetY,
                 mTextPaint);
 
         canvas.drawText("SpO2",
@@ -111,7 +112,7 @@ public class MesStModCountView extends View {
 
         canvas.drawText("%",
                 leftX,
-                leftY*15,
+                leftY*15+offsetY,
                 mTextPaint);
 
 //        float rightX = contentWidth;

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MesApp</string>
     <string name="fio2">氧浓度</string>
@@ -29,5 +30,4 @@
     <string name="mode_hflow">HFlow</string>
     <string name="mode_lflow">LFlow</string>
     <string name="lb_waiting_progress">等待呼吸机连接</string>
-
 </resources>

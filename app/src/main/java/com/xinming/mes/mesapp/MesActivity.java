@@ -74,6 +74,7 @@ public class MesActivity extends AppCompatActivity {
         getSupportActionBar().hide();// 隐藏ActionBar
         MesExceptionHandler handler = new MesExceptionHandler(this);
         Thread.setDefaultUncaughtExceptionHandler(handler);
+
         setContentView(R.layout.mes_port_setting);
         initModHandlers();
         initSettingLayout();
@@ -104,23 +105,23 @@ public class MesActivity extends AppCompatActivity {
      */
     private void initModHandlers(){
 //        View v1 = View.inflate(this, R.layout.mes_mod1_other_land, null);
-        View v1 = View.inflate(this, R.layout.mes_mod2_main_land, null);
-        View v3 = View.inflate(this, R.layout.mes_mod3_main_land, null);
-        IModHandler hlModHandler = new HLModHandler(this,v1,mHandler);
-        IModHandler papModHandler = new PAPModHandler(this,v3,mHandler);
-        IModHandler otherModHandler = new OtherModHandler(this,v3,mHandler);
+//        View v1 = View.inflate(this, R.layout.mes_mod2_main_land, null);
+//        View v3 = View.inflate(this, R.layout.mes_mod3_main_land, null);
+        IModHandler hlModHandler = new HLModHandler(this,mHandler);
+        IModHandler papModHandler = new PAPModHandler(this,mHandler);
+        IModHandler otherModHandler = new OtherModHandler(this,mHandler);
 
         Map<String,IModHandler> handlers = ((MesApp)getApplication()).getHandlers();
-        handlers.put("S/T",otherModHandler);
-        handlers.put("T",otherModHandler);
-        handlers.put("S",otherModHandler);
-        handlers.put("CPAP",papModHandler);
-        handlers.put("APAP",papModHandler);
-        handlers.put("PCV",otherModHandler);
-        handlers.put("AutoS",otherModHandler);
-        handlers.put("MVAPS",otherModHandler);
-        handlers.put("HFlow",hlModHandler);
-        handlers.put("LFlow",hlModHandler);
+        handlers.put(getString(R.string.mode_st),otherModHandler);
+        handlers.put(getString(R.string.mode_t),otherModHandler);
+        handlers.put(getString(R.string.mode_s),otherModHandler);
+        handlers.put(getString(R.string.mode_cpap),papModHandler);
+        handlers.put(getString(R.string.mode_apap),papModHandler);
+        handlers.put(getString(R.string.mode_pc),otherModHandler);
+        handlers.put(getString(R.string.mode_autos),otherModHandler);
+        handlers.put(getString(R.string.mode_mvaps),otherModHandler);
+        handlers.put(getString(R.string.mode_hflow),hlModHandler);
+        handlers.put(getString(R.string.mode_lflow),hlModHandler);
     }
 
     /**

@@ -1,27 +1,23 @@
 package com.xinming.mes.mesapp.mod;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
-import android.view.View;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 import com.xinming.mes.mesapp.R;
 import com.xinming.mes.mesapp.charts.MesFPChartView;
-import com.xinming.mes.mesapp.entity.ChartData;
 import com.xinming.mes.mesapp.entity.RespiratorConfigDataVO;
 import com.xinming.mes.mesapp.entity.RespiratorDataVO;
 import com.xinming.mes.mesapp.views.MesCircularView;
-
-import java.util.Date;
 
 public class PAPModHandler extends BaseModHandler {
 
     boolean firstLoad = true;
 
-    public PAPModHandler(Context ctx, View v1,Handler mHandler){
-        super(ctx,v1,mHandler);
-        initChart();
+    public PAPModHandler(Context ctx, Handler mHandler){
+        super(ctx,mHandler);
     }
 
     @Override
@@ -30,24 +26,7 @@ public class PAPModHandler extends BaseModHandler {
             @Override
             public void run() {
                 Logger.d("更新单包数据 start");
-
-                //流量图表设置
-                ChartData fData = new ChartData();
-                fData.setTime(new Date());
-                fData.setData(data.getFlow());
-                fData.setColor(data.getEventHighColor());
-                MesFPChartView chartFlow = v.findViewById(R.id.chart1);
-                chartFlow.addData(fData);
-                chartFlow.invalidate();
-                //压力图表设置
-                ChartData pData = new ChartData();
-                pData.setTime(new Date());
-                pData.setData(data.getPressure());
-                pData.setColor(data.getEventHighColor());
-                MesFPChartView chartPressure = v.findViewById(R.id.chart2);
-                chartPressure.addData(pData);
-                chartPressure.invalidate();
-
+                Activity v = (Activity) ctx;
                 //SpO2 value
                 TextView txSpO2Val = v.findViewById(R.id.spo2);
                 txSpO2Val.setText(data.getSpo2());
@@ -61,30 +40,6 @@ public class PAPModHandler extends BaseModHandler {
                     //CPAP value
                     TextView txCpapVal = v.findViewById(R.id.t13);
                     txCpapVal.setText(cfgData.getCpap());
-                }
-                //首次加载更新如下数据,此数据是静态的,只刷新一次即可
-                if(firstLoad){
-                    //I:E value
-                    TextView txIeVal = v.findViewById(R.id.ie);
-                    txIeVal.setText("--");
-                    //MV value
-                    TextView txMvVal = v.findViewById(R.id.mv);
-                    txMvVal.setText("--");
-                    //Leak value
-                    TextView txLeakVal = v.findViewById(R.id.leak);
-                    txLeakVal.setText("--");
-
-                    //Epap
-                    TextView txEpap = v.findViewById(R.id.t21);
-                    txEpap.setText("--");
-                    //呼吸频率
-                    TextView txBpm = v.findViewById(R.id.t31);
-                    txBpm.setText("--");
-                    //潮气量
-                    TextView txMl = v.findViewById(R.id.t41);
-                    txMl.setText("--");
-
-                    firstLoad = false;
                 }
 
                 //潮气量
@@ -106,13 +61,36 @@ public class PAPModHandler extends BaseModHandler {
             @Override
             public void run() {
                 Logger.d("更新配置数据 start");
+                Activity v = (Activity) ctx;
+
+                String two_hl = v.getString(R.string.two_horizontal_line);
+                //I:E value
+                TextView txIeVal = v.findViewById(R.id.ie);
+                txIeVal.setText(two_hl);
+                //MV value
+                TextView txMvVal = v.findViewById(R.id.mv);
+                txMvVal.setText(two_hl);
+                //Leak value
+                TextView txLeakVal = v.findViewById(R.id.leak);
+                txLeakVal.setText(two_hl);
+
+                //Epap
+                TextView txEpap = v.findViewById(R.id.t21);
+                txEpap.setText(two_hl);
+                //呼吸频率
+                TextView txBpm = v.findViewById(R.id.t31);
+                txBpm.setText(two_hl);
+                //潮气量
+                TextView txMl = v.findViewById(R.id.t41);
+                txMl.setText(two_hl);
+
                 //  mode title
                 TextView txMode = v.findViewById(R.id.area1);
-                txMode.setText( "模式     " + data.getMode());
+                txMode.setText(String.format("%s%s%s",v.getString(R.string.mode) ,"     ",data.getMode()));
 
                 //CPAP mode
                 TextView txCpapName = v.findViewById(R.id.t12);
-                txCpapName.setText(data.getMode());
+                txCpapName.setText(v.getString(R.string.mode_cpap));
                 //CPAP value
                 TextView txCpapVal = v.findViewById(R.id.t13);
                 txCpapVal.setText(data.getCpap());
@@ -140,7 +118,7 @@ public class PAPModHandler extends BaseModHandler {
 
                 //FiO2 mode
                 TextView txFio2Name = v.findViewById(R.id.t52);
-                txFio2Name.setText("FiO2");
+                txFio2Name.setText(v.getString(R.string.tv_fio2));
                 //FiO2 value
                 TextView txFio2Val = v.findViewById(R.id.t53);
                 txFio2Val.setText(data.getFio2());
@@ -152,7 +130,6 @@ public class PAPModHandler extends BaseModHandler {
 
                 //图表设置
                 MesFPChartView chartFlow = v.findViewById(R.id.chart1);
-                chartFlow.setUnit(data.getUnit());
                 chartFlow.invalidate();
 
                 MesFPChartView chartPressure = v.findViewById(R.id.chart2);
@@ -163,55 +140,12 @@ public class PAPModHandler extends BaseModHandler {
         });
     }
 
-
-    protected void init(){
-        mHandler.post(new Runnable() {
-            @Override
+    protected  void  setContentView(){
+        ((Activity)ctx).runOnUiThread(new Runnable() {
             public void run() {
-                //图表初始化
-                MesFPChartView chartFlow = v.findViewById(R.id.chart1);
-                chartFlow.resetData();
-
-                MesFPChartView chartPressure = v.findViewById(R.id.chart2);
-                chartPressure.resetData();
-
-                //I:E value
-                TextView txIeVal = v.findViewById(R.id.ie);
-                txIeVal.setText("--");
-                //MV value
-                TextView txMvVal = v.findViewById(R.id.mv);
-                txMvVal.setText("--");
-                //Leak value
-                TextView txLeakVal = v.findViewById(R.id.leak);
-                txLeakVal.setText("--");
-                //SpO2 value
-                TextView txSpO2Val = v.findViewById(R.id.spo2);
-                txSpO2Val.setText("--");
-
-                //设置Ipap单位
-                MesCircularView ipapView = v.findViewById(R.id.bta11);
-                ipapView.setUnit("");
-                ipapView.invalidate();
-                //Ipap
-                TextView txIpap = v.findViewById(R.id.t11);
-                txIpap.setText("--");
-                //设置Epap单位
-                MesCircularView epapView = v.findViewById(R.id.bta21);
-                epapView.setUnit("");
-                epapView.invalidate();
-                //Epap
-                TextView txEpap = v.findViewById(R.id.t21);
-                txEpap.setText("--");
-                //呼吸频率
-                TextView txBpm = v.findViewById(R.id.t31);
-                txBpm.setText("--");
-                //潮气量
-                TextView txMl = v.findViewById(R.id.t41);
-                txMl.setText("--");
-                //潮气量
-                TextView txFio2 = v.findViewById(R.id.t51);
-                txFio2.setText("--");
+                ((Activity) ctx).setContentView(R.layout.mes_mod3_main_land);
             }
         });
     }
+
 }

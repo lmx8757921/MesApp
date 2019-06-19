@@ -14,7 +14,7 @@
         android:textColorLink="@color/black"
         android:textSize="30sp"
         android:gravity="center"
-        android:text="端口配置"
+        android:text="@string/port_setting"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -22,7 +22,7 @@
         app:layout_constraintWidth_percent="1"
         app:layout_constraintHeight_percent="0.25"
 
-         />
+        />
 
     <TextView
         android:id="@+id/setting_ip_tag"
@@ -31,13 +31,13 @@
         android:textColor="@color/blue"
         android:textSize="18sp"
         android:gravity="right|center"
-        android:text="手机IP："
+        android:text="@string/phone_ip"
         app:layout_constraintTop_toBottomOf="@+id/setting_title"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tIP"
         app:layout_constraintWidth_percent="0.3"
         app:layout_constraintHeight_percent="0.25"
-         />
+        />
 
     <TextView
         android:id="@+id/tIP"
@@ -51,7 +51,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintWidth_percent="0.7"
         app:layout_constraintHeight_percent="0.25"
-         />
+        />
 
     <TextView
         android:id="@+id/setting_port_tag"
@@ -60,13 +60,13 @@
         android:textColor="@color/blue"
         android:textSize="18sp"
         android:gravity="right|center"
-        android:text="监听端口号："
+        android:text="@string/listen_port"
         app:layout_constraintTop_toBottomOf="@+id/setting_ip_tag"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tPort"
         app:layout_constraintWidth_percent="0.3"
         app:layout_constraintHeight_percent="0.25"
-         />
+        />
 
 
     <EditText
@@ -89,7 +89,7 @@
         android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="启动"
+        android:text="@string/start"
         android:onClick="startService"
         app:layout_constraintTop_toBottomOf="@+id/setting_port_tag"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -97,7 +97,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintWidth_percent="1"
         app:layout_constraintHeight_percent="0.25"
-         />
+        />
 
 
 

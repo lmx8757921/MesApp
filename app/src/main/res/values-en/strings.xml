@@ -1,21 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MesApp</string>
-    <string name="fio2">氧浓度</string>
+    <string name="fio2">FiO2</string>
     <string name="SpO2">SpO2</string>
-    <string name="Flow">流 量</string>
-    <string name="temperature">温 度</string>
+    <string name="Flow">Flow</string>
+    <string name="temperature">Temp</string>
     <string name="two_horizontal_line">--</string>
-    <string name="mode">模式</string>
+    <string name="mode">Mode</string>
     <string name="tv_ipap">IPAP</string>
     <string name="tv_epap">EPAP</string>
-    <string name="tv_respiratory_rate">呼吸频率</string>
-    <string name="tv_tidal_volume">潮气量</string>
+    <string name="tv_respiratory_rate">resrate</string>
+    <string name="tv_tidal_volume">tidal</string>
     <string name="tv_fio2">FiO2</string>
     <string name="two_exclamatory_mark">!!</string>
-    <string name="port_setting">端口配置</string>
-    <string name="phone_ip">手机IP：</string>
-    <string name="listen_port">监听端口号：</string>
-    <string name="start">启动</string>
+    <string name="port_setting">port setting</string>
+    <string name="phone_ip">Phone IP：</string>
+    <string name="listen_port">listen port：</string>
+    <string name="start">start</string>
     <string name="ml">ml</string>
     <string name="bpm">bpm</string>
     <string name="mode_st">S/T</string>
@@ -28,6 +29,5 @@
     <string name="mode_mvaps">MVAPS</string>
     <string name="mode_hflow">HFlow</string>
     <string name="mode_lflow">LFlow</string>
-    <string name="lb_waiting_progress">等待呼吸机连接</string>
-
+    <string name="lb_waiting_progress">waiting for device to connect</string>
 </resources>
